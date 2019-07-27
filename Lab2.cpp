@@ -45,6 +45,7 @@ vector<int> drawLineDDA(int x1, int y1, int x2, int y2, double R, double G, doub
     int dx = x2 - x1;
     int dy = y2 - y1;
     int steps;
+    
     if (abs(dx) > abs(dy))
         steps = abs(dx);
     else
@@ -63,7 +64,6 @@ vector<int> drawLineDDA(int x1, int y1, int x2, int y2, double R, double G, doub
         x_at_y.push_back(ROUND(x));
         setPixel(ROUND(x), ROUND(y), R, G, B);
     }
-    cout << "returning from draw line" << endl;
     return x_at_y;
 }
 
@@ -82,75 +82,6 @@ void randomLines() {
     return;
 }
 
-// void drawTriangle(int x1, int y1, int x2, int y2, int x3, int y3, double R, double G, double B) {
-//     drawLineDDA(x1, y1, x2, y2, R, G, B);
-//     drawLineDDA(x2, y2, x3, y3, R, G, B);
-//     drawLineDDA(x3, y3, x1, y1, R, G, B);
-// }
-
-// // // THis function will not work due to how the pixels are set out
-// void fillTriangle(int x1, int y1, int x2, int y2, int x3, int y3, double R, double G, double B) {
-//     // // Find out p0, p1 and p2
-//     // int p0x, p0y, p1x, p1y, p2x, p2y;
-//     // // p1 = top
-//     // if (y1 > y2 && y1 > y3) {
-//     //     p1x = x1;
-//     //     p1y = y1;
-//     //     // p2 = left
-//     //     if (y2 < y3) {
-//     //         p2x = x2;
-//     //         p2y = y2;
-//     //         // p0 = bottom
-//     //         p0x = x3;
-//     //         p0y = y3;
-//     //     } else {
-//     //         p1x = x3;
-//     //         p1y = y3;
-//     //         p2x = x2;
-//     //         p2y = y2;
-//     //     }
-//     // } else if ( y2 > y1 && y2 > y3) {
-//     //     p1x = x2;
-//     //     p1y = y2;
-//     //     if (y1 < y2) {
-//     //         p1x = x1;
-//     //         p1y = y1;
-//     //         p2x = x2;
-//     //         p2y = y2;
-//     //     } else {
-//     //         p1x = x2;
-//     //         p1y = y2;
-//     //         p2x = x1;
-//     //         p2y = y1;
-//     //     }
-//     // } else {
-//     //     p1x = x3;
-//     //     p1y = y3;
-//     // }
-
-
-//     int LEdge[200], REdge[200]; //Edge arrays
-//     double mL = (x3 - x2) / (double)(y3 - y2); // Memory left?
-//     double mR = (x1 - x2) / (double)(y1 - y2);
-//     double xL = x2;
-//     double xR = x2;     
-//     int hL = y3 - y2;
-//     int hR = y1 - y2;
-//     int high = (hL > hR) ? hL : hR;
-//     for (int y = 0; y < high; y++) {
-//         LEdge[y] = xL;
-//         REdge[y] = xR;
-//         if (y == hL)
-//             mL = (x1 - x3) / (double)(y1 - y3);
-//         if (y == hR)
-//             mR = (x3 - x1) / (double)(y3 - y1);
-//         xL += mL;
-//         xR += mR;
-//         drawLineDDA(ROUND(xL), y + 3, ROUND(xR), y + 3, R, G, B);
-//     }
-//     drawTriangle(x1, y1, x2, y2, x3, y3, RAND_COLOUR(), RAND_COLOUR(), RAND_COLOUR());
-
-// }
 
 void fillTriangle(int x1, int y1, int x2, int y2, int x3, int y3, double R, double G, double B) {
     // Find out top and bottom points
@@ -192,13 +123,13 @@ void fillTriangle(int x1, int y1, int x2, int y2, int x3, int y3, double R, doub
     int* points[3] = {p1, p2, p3};
 
     
-    int size_of_array = topy - boty;
+    int size_of_array = (topy - boty);
     vector<vector<int>> x_at_y(size_of_array);
-    // int x_at_y[size_of_array];
     for (int i = 0; i < 3; i++) {
         int warp_i = i + 1;
-        if (i == 3)
+        if (i == 2)
             warp_i = 0;
+
         if (points[i][0] == points[warp_i][0]) { // If vertical line (x is same)
             int bottom = (points[i][1] < points[warp_i][1]) ? points[i][1] : points[warp_i][1];
             int top = (points[i][1] > points[warp_i][1]) ? points[i][1] : points[warp_i][1];
@@ -214,20 +145,16 @@ void fillTriangle(int x1, int y1, int x2, int y2, int x3, int y3, double R, doub
 
             // Calculate gradient
             vector<int> xy = drawLineDDA(bottom_x, bottom_y, top_x, top_y, 1, 1, 1);
-            cout << "Assigned xy: " << xy.size() << endl;
             int k = 0;
-            cout << top_y << "-" << bottom_y << endl;
-            for (int j = bottom_y; j < top_y - 1; j++) { // Add x value to vector for values starting at the bottom to the top
+            for (int j = bottom_y - boty; j < top_y - boty; j++) { // Add x value to vector for values starting at the bottom to the top
                 x_at_y[j].push_back(xy[k]);
                 k++;
-                cout << "Added some shit: " << j << "AHHSD " << k << endl;
             }
-            cout << "finished adding shit" << endl;
         } // Horizontal lines do nothing
     }
     // Draw the lines
-    for (int y = boty; y < topy; y++) {
-        drawLineDDA(x_at_y[y][0], y, x_at_y[y][1], y, 1, 1, 1);
+    for (int y = 0; y < topy - boty; y++) {
+        drawLineDDA(x_at_y[y][0], y + boty, x_at_y[y][1], y + boty, 1, 1, 1);
     }
 }
 
