@@ -153,10 +153,15 @@ void fillTriangle(point p1, point p2, point p3, double R, double G, double B) {
             }
         } // Horizontal lines do nothing
     }
-    // Draw the lines
+    // Draw the lines for filling triangle
     for (int y = 0; y < topy - boty; y++) {
-        drawLineDDA(x_at_y[y][0], y + boty, x_at_y[y][1], y + boty, R, G, B);
+        if (x_at_y[y][0] != x_at_y[y][1])
+            drawLineDDA(x_at_y[y][0], y + boty + 1, x_at_y[y][1], y + boty + 1, R, G, B);
     }
+    // Draw lines for outline
+    drawLineDDA(p1.x, p1.y, p2.x, p2.y, 1, 1, 1);
+    drawLineDDA(p2.x, p2.y, p3.x, p3.y, 1, 1, 1);
+    drawLineDDA(p3.x, p3.y, p1.x, p1.y, 1, 1, 1);
 }
 
 bool same_side(point a, point b, point I1, point I2) {
@@ -273,14 +278,10 @@ static void display(void)
     //drawLineDDA(13, 10, -12, -9);
     // randomLines();
     // setPixel(20, 20, 1, 1, 1);
-    // drawTriangle(2, 2, 10, 5, 5, 10, 1, 1, 1);
-    // fillTriangle(2, 2, 11, 6, 6, 11, 1, 1, 1);
-    // fillTriangle(12, 5, 2, 2, 5, 12, RAND_COLOUR(), RAND_COLOUR(), RAND_COLOUR());
+
     point a = {1, 15};
     point b = {5, 19};
     point c = {3, 12};
-
-    // fillTriangle(c, b, a, 1, 1, 1);
     point d = {15, 1};
     point e = {2, 1};
     vector<point> points = {a, b, c, d, e};
