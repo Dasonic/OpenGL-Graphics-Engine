@@ -169,7 +169,7 @@ bool same_side(point a, point b, point I1, point I2) {
 
 // Checks if a point is inside a triangle
 bool inside(point p, point a, point b, point c) {
-    return same_side(p, a, b, c) && same_side(p, b, a, c) && same_side(p, c, a, b);
+    return same_side(p, a, b, c) && same_side(p, b, a, c) && same_side(p, c, b, a);
 }
 
 bool check_inside_polygon(vector<point> points, point vertex_a, point vertex_b, point vertex_c) {
@@ -214,7 +214,7 @@ bool check_inside_polygon(vector<point> points, point vertex_a, point vertex_b, 
     for (int y = 0; y < points.size(); y++) {
         if (y != vertex_a.y && y != vertex_b.y && y != vertex_c.y) {
             int px = points[y].y;
-            if (!(px < min.x && px > max.x || y < min.y && y > max.y)) {
+            if (!(px < min.x && px > max.x && y < min.y && y > max.y)) {
                 // Point inside rectangle, now do inside triangle test
                 point p;
                 p.x = px;
