@@ -25,7 +25,12 @@ static void resize(int width, int height) {
     glOrtho(0.0, 10.0, 0.0, 10.0, -1.0, 1.0);   // setup a 10x10x2 viewing world
     // glOrtho(0.0, width * SCALE, 0.0, height * SCALE, -1.0, 1.0);   // setup a dynanically sized viewing world
 }
-
+/*
+    Takes in 2 co-ordinates and 3 colour values.
+    Draws a small box representing a pixel to the screen
+    \param x and y: integer between 1 and 20
+    \param r, g and b: double between 0 and 0.256
+ */
 void setPixel(int x, int y, double r, double g, double b) {
     glBegin(GL_QUADS);
         glColor3d(r, g, b); // Set colour
@@ -37,6 +42,9 @@ void setPixel(int x, int y, double r, double g, double b) {
     glEnd();
 }
 
+/*
+    Draws 100 pixels in random locations and random colours to the screen
+ */
 void randomPixels() {
     srand(time(NULL));
     for (int i = 0; i < 100; i++) {
@@ -47,6 +55,12 @@ void randomPixels() {
 
 }
 
+/*
+    Takes in 4 co-ordinates and 3 colour values.
+    Draws a line made of small boxs representing pixels to the screen
+    \param x and y: integer between 1 and 20
+    \param r, g and b: double between 0 and 0.256
+ */
 vector<int> drawLineDDA(int x1, int y1, int x2, int y2, double R, double G, double B) {
     int dx = x2 - x1;
     int dy = y2 - y1;
@@ -73,6 +87,9 @@ vector<int> drawLineDDA(int x1, int y1, int x2, int y2, double R, double G, doub
     return x_at_y;
 }
 
+/*
+    Draws 10 random lines in random locations and random colours to the screen
+ */
 void randomLines() {
     srand(time(NULL));
     int x1, y1, x2, y2;
@@ -88,7 +105,12 @@ void randomLines() {
     return;
 }
 
-
+/*
+    Takes in 3 co-ordinate points and 3 colour values.
+    Draws a triangle using small boxs representing a pixel to the screen and fills them with given colour
+    \param p: struct with 2 integers between 1 and 20 representing x and y
+    \param r, g and b: double between 0 and 0.256
+ */
 void fillTriangle(point p1, point p2, point p3, double R, double G, double B) {
     // Find out top and bottom points
     int topx, topy, botx, boty;
@@ -164,6 +186,11 @@ void fillTriangle(point p1, point p2, point p3, double R, double G, double B) {
     drawLineDDA(p3.x, p3.y, p1.x, p1.y, 1, 1, 1);
 }
 
+/*
+    Takes in 4 co-ordinate points
+    Returns true if points a and b are on the same side
+    \param a, b, I1, I2: struct with 2 integers between 1 and 20 representing x and y
+ */
 bool same_side(point a, point b, point I1, point I2) {
     // I1 and I2 are ends of the line
     int apt = (a.x - I1.x) * (I2.y - I1.y) - (I2.x - I1.x) * (a.y - I1.y);
@@ -172,11 +199,21 @@ bool same_side(point a, point b, point I1, point I2) {
     return ((apt * bpt) > 0);
 }
 
-// Checks if a point is inside a triangle
+/*
+    Takes in 4 co-ordinate points
+    Returns true if a point p is inside a triangle formed out of points a, b and c
+    \param p, a, b, c: struct with 2 integers between 1 and 20 representing x and y
+ */
 bool inside(point p, point a, point b, point c) {
     return same_side(p, a, b, c) && same_side(p, b, a, c) && same_side(p, c, b, a);
 }
 
+/*
+    Takes in an array of co-ordinate points and 3 co-ordinate points that form a triangle
+    Returns true if a point p is inside a triangle formed out of points a, b and c
+    \param points: vector of struct with 2 integers between 1 and 20 representing x and y
+    \param a, b, c: struct with 2 integers between 1 and 20 representing x and y
+ */
 bool check_inside_polygon(vector<point> points, point vertex_a, point vertex_b, point vertex_c) {
     // Find min and max points
     point min, max;
@@ -234,6 +271,12 @@ bool check_inside_polygon(vector<point> points, point vertex_a, point vertex_b, 
     return false;
 }
 
+/*
+    Takes in an array of co-ordinate points and 3 co-ordinate points that form a triangle
+    Returns true if a point p is inside a triangle formed out of points a, b and c
+    \param points: vector of struct with 2 integers between 1 and 20 representing x and y
+    \param r, g and b: double between 0 and 0.256
+ */
 void drawPolygon(vector<point> points, double R, double G, double B) {
     vector<int> used = {}; // stores index of used points
     while (used.size() < points.size()) {
