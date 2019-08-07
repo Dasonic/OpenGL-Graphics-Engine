@@ -61,7 +61,7 @@ vector<int> drawLineDDA(point p1, point p2, colour RGB) {
 
 	point p;
     double x = p1.x;
-    double y = p2.y;
+    double y = p1.y;
 	p.x = ROUND(x);
 	p.y = ROUND(y);
 

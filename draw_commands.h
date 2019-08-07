@@ -13,9 +13,9 @@
 	bool inside(point p, point a, point b, point c);
 	bool check_inside_polygon(std::vector<point> points, point vertex_a, point vertex_b, point vertex_c);
 
-	void setPixel(int x, int y, colour RGB);
+	void setPixel(point p, colour RGB);
 	void randomPixels();
-	std::vector<int> drawLineDDA(int x1, int y1, int x2, int y2, colour RGB);
+	std::vector<int> drawLineDDA(point p1, point p2, colour RGB);
 	void randomLines();
 	void fillTriangle(point p1, point p2, point p3, colour RGB);
 	void drawPolygon(std::vector<point> points, colour RGB);

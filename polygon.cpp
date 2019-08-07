@@ -7,6 +7,7 @@
 
 Polygon::Polygon(std::vector<point> points) {
 	point_list = points;
+	fill_colour = {1, 1, 1};
 }
 
 void Polygon::set_colour(colour RGB) {
@@ -22,5 +23,5 @@ void Polygon::rotate() {
 
 }
 void Polygon::translate() {
-	
+
 }

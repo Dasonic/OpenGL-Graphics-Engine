@@ -8,6 +8,7 @@
 #include "matrix.h"
 #include "structs.h"
 #include "draw_commands.h"
+#include "polygon.h"
 
 using namespace std;
 
@@ -51,17 +52,19 @@ static void display(void)
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    //randomPixels();
-    //drawLineDDA(13, 10, -12, -9);
-    randomLines();
-    // setPixel(20, 20, 1, 1, 1);
+    
 
-    // point a = {1, 15};
-    // point b = {5, 19};
-    // point c = {3, 12};
-    // point d = {15, 1};
-    // point e = {2, 1};
-    // vector<point> points = {a, b, c, d, e};
+    point a = {1, 15};
+    point b = {5, 19};
+    point c = {3, 12};
+    point d = {15, 1};
+    point e = {2, 1};
+    vector<point> points = {a, b, c, d, e};
+
+	Polygon testpoly(points);
+	testpoly.draw();
+	// drawLineDDA({1, 1}, {10, 10}, {1, 1, 1});
+	// setPixel({1, 1}, {0.1, 0.1, 0.1});
     // drawPolygon(points, RAND_COLOUR(), RAND_COLOUR(), RAND_COLOUR());
     // setPixel(a.x, a.y, 0.5, 0.5, 0.5);
     // setPixel(b.x, b.y, 0.5, 0.5, 0.5);
