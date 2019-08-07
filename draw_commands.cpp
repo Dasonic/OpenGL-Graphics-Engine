@@ -11,7 +11,12 @@
 
 using namespace std;
 
-
+/*
+    Takes in 1 co-ordinates and a colour value
+    Draws a line made of small boxs representing pixels to the screen
+    \param p: struct with 2 integers between 1 and 20 representing x and y
+    \param RGB: struct with 3 doubles between 0 and 0.256
+ */
 void setPixel(point p, colour RGB) {
     glBegin(GL_QUADS);
         glColor3d(RGB.R, RGB.G, RGB.B); // Set colour
@@ -39,8 +44,8 @@ void randomPixels() {
 /*
     Takes in 4 co-ordinates and 3 colour values.
     Draws a line made of small boxs representing pixels to the screen
-    \param x and y: integer between 1 and 20
-    \param r, g and b: double between 0 and 0.256
+    \param p1, p2: struct with 2 integers between 1 and 20 representing x and y
+    \param RGB: struct with 3 doubles between 0 and 0.256
  */
 vector<int> drawLineDDA(point p1, point p2, colour RGB) {
     int dx = p2.x - p1.x;
@@ -95,8 +100,8 @@ void randomLines() {
 /*
     Takes in 3 co-ordinate points and 3 colour values.
     Draws a triangle using small boxs representing a pixel to the screen and fills them with given colour
-    \param p: struct with 2 integers between 1 and 20 representing x and y
-    \param r, g and b: double between 0 and 0.256
+    \param p1, p2, p3: structs with 2 integers between 1 and 20 representing x and y
+    \param RGB: struct with 3 doubles between 0 and 0.256
  */
 void fillTriangle(point p1, point p2, point p3, colour RGB) {
 	colour white = {1, 1, 1};
@@ -268,7 +273,7 @@ bool check_inside_polygon(vector<point> points, point vertex_a, point vertex_b, 
     Takes in an array of co-ordinate points and 3 co-ordinate points that form a triangle
     Returns true if a point p is inside a triangle formed out of points a, b and c
     \param points: vector of struct with 2 integers between 1 and 20 representing x and y
-    \param r, g and b: double between 0 and 0.256
+    \param RGB: struct with 3 doubles between 0 and 0.256
  */
 void drawPolygon(vector<point> points, colour RGB) {
     vector<int> used = {}; // stores index of used points
