@@ -4,6 +4,9 @@
 #include <vector>
 #include <iostream>
 #include <algorithm>
+#include <valarray>
+
+#include "matrix.h"
 
 using namespace std;
 
@@ -312,6 +315,48 @@ void drawPolygon(vector<point> points, double R, double G, double B) {
 
 }
 
+
+void transform(int x, int y, int z, int tx, int ty, int tz) {
+	// int col, row = 4;
+	// valarray<int> t( row * col );
+	// t[ std::slice( 0 * row, row, 1 ) ] = {1, 0, 0, tx}; // Set 1st row to
+	// t[ std::slice( 1 * row, row, 1 ) ] = {0, 1, 0, ty}; // Set 2nd row to
+	// t[ std::slice( 2 * row, row, 1 ) ] = {0, 0, 1, tz}; // Set 3rd row to
+	// t[ std::slice( 3 * row, row, 1 ) ] = {0, 0, 0, 1}; // Set 4th row to
+
+	// valarray<int> p( 1 * col );
+	// p[ std::slice( 0, col, 1 ) ] = {tx, ty, tz, 1}; // Set 1st column to
+
+	// valarray<int> pt = t * p;
+	matrix t(4, 4);
+	t.set_row(0, vector<int> {1, 0, 0, tx});
+	t.set_row(1, vector<int> {0, 1, 0, ty});
+	t.set_row(2, vector<int> {0, 0, 1, tz});
+	t.set_row(3, vector<int> {0, 0, 0, 1});
+	t.print();
+	cout << endl;
+
+	matrix p(4, 1);
+	p.set_col(0, vector<int> {x, y, z, 1});
+	p.print();
+
+	cout << endl;
+
+	matrix p1(4, 1);
+	p1 = t.multiply(p);
+	p1.print();
+
+
+	// matrix test = matrix(3, 3);
+	// test.print();
+	// vector<int> das = {1, 2, 3};
+	// test.set_col(2, das);
+	// test.print();
+	
+
+	
+}
+
 // What to display
 static void display(void)
 {
@@ -322,18 +367,22 @@ static void display(void)
     // randomLines();
     // setPixel(20, 20, 1, 1, 1);
 
-    point a = {1, 15};
-    point b = {5, 19};
-    point c = {3, 12};
-    point d = {15, 1};
-    point e = {2, 1};
-    vector<point> points = {a, b, c, d, e};
-    drawPolygon(points, RAND_COLOUR(), RAND_COLOUR(), RAND_COLOUR());
-    setPixel(a.x, a.y, 0.5, 0.5, 0.5);
-    setPixel(b.x, b.y, 0.5, 0.5, 0.5);
-    setPixel(c.x, c.y, 0.5, 0.5, 0.5);
-    setPixel(d.x, d.y, 0.5, 0.5, 0.5);
-    setPixel(e.x, e.y, 0.5, 0.5, 0.5);
+    // point a = {1, 15};
+    // point b = {5, 19};
+    // point c = {3, 12};
+    // point d = {15, 1};
+    // point e = {2, 1};
+    // vector<point> points = {a, b, c, d, e};
+    // drawPolygon(points, RAND_COLOUR(), RAND_COLOUR(), RAND_COLOUR());
+    // setPixel(a.x, a.y, 0.5, 0.5, 0.5);
+    // setPixel(b.x, b.y, 0.5, 0.5, 0.5);
+    // setPixel(c.x, c.y, 0.5, 0.5, 0.5);
+    // setPixel(d.x, d.y, 0.5, 0.5, 0.5);
+    // setPixel(e.x, e.y, 0.5, 0.5, 0.5);
+
+	transform(1, 1, 1, 2, 2, 2);
+	exit(1);
+
     glutSwapBuffers();
 }
 
