@@ -7,6 +7,7 @@
 		int num_rows, num_cols;
 
 		public:
+			matrix(int num_rows, int num_cols);
 			void set_row(int row_number, std::vector<int> row);
 			void set_col(int col_number, std::vector<int> col);
 			void set_val(int row_number, int col_number, int val);
@@ -16,6 +17,5 @@
 			int get_cols();
 			void print();
 			matrix multiply(matrix other_matrix);
-			matrix(int num_rows, int num_cols);
 	};
 #endif

@@ -4,22 +4,14 @@
 #include <vector>
 #include <iostream>
 #include <algorithm>
-#include <valarray>
 
 #include "matrix.h"
+#include "structs.h"
+#include "draw_commands.h"
 
 using namespace std;
 
-#define SCALE 0.5
-#define MAX_X 20
-#define MAX_Y 20
-#define RAND_COLOUR() (rand()%256)/100
-#define ROUND(x) ((int)(x + 0.5))
 
-struct point {
-    int x;
-    int y;
-};
 
 static void resize(int width, int height) {
     glClearColor(0.0, 0.0, 0.0, 0.0);         // black background
@@ -28,306 +20,9 @@ static void resize(int width, int height) {
     glOrtho(0.0, 10.0, 0.0, 10.0, -1.0, 1.0);   // setup a 10x10x2 viewing world
     // glOrtho(0.0, width * SCALE, 0.0, height * SCALE, -1.0, 1.0);   // setup a dynanically sized viewing world
 }
-/*
-    Takes in 2 co-ordinates and 3 colour values.
-    Draws a small box representing a pixel to the screen
-    \param x and y: integer between 1 and 20
-    \param r, g and b: double between 0 and 0.256
- */
-void setPixel(int x, int y, double r, double g, double b) {
-    glBegin(GL_QUADS);
-        glColor3d(r, g, b); // Set colour
-        // Define vertices
-        glVertex3f((x - 1) * SCALE, (y - 1) * SCALE,0.0);
-        glVertex3f(x * SCALE, (y - 1) * SCALE, 0.0);
-        glVertex3f(x * SCALE, y * SCALE,0.0);
-        glVertex3f((x - 1) * SCALE, y * SCALE,0.0);
-    glEnd();
-}
-
-/*
-    Draws 100 pixels in random locations and random colours to the screen
- */
-void randomPixels() {
-    srand(time(NULL));
-    for (int i = 0; i < 100; i++) {
-        int randomLocX = (rand()%MAX_X);
-        int randomLocY = (rand()%MAX_Y);
-        setPixel(randomLocX, randomLocY, RAND_COLOUR(), RAND_COLOUR(), RAND_COLOUR());
-    }
-
-}
-
-/*
-    Takes in 4 co-ordinates and 3 colour values.
-    Draws a line made of small boxs representing pixels to the screen
-    \param x and y: integer between 1 and 20
-    \param r, g and b: double between 0 and 0.256
- */
-vector<int> drawLineDDA(int x1, int y1, int x2, int y2, double R, double G, double B) {
-    int dx = x2 - x1;
-    int dy = y2 - y1;
-    int steps;
-    
-    if (abs(dx) > abs(dy))
-        steps = abs(dx);
-    else
-        steps = abs(dy);
-    double x_inc = dx / (double) steps;
-    double y_inc = dy / (double) steps;
-
-    double x = x1;
-    double y = y1;
-
-    vector<int> x_at_y;
-    setPixel(ROUND(x), ROUND(y), R, G, B);
-    for (int i = 0; i < steps; i++) {
-        x += x_inc;
-        y += y_inc;
-        x_at_y.push_back(ROUND(x));
-        setPixel(ROUND(x), ROUND(y), R, G, B);
-    }
-    return x_at_y;
-}
-
-/*
-    Draws 10 random lines in random locations and random colours to the screen
- */
-void randomLines() {
-    srand(time(NULL));
-    int x1, y1, x2, y2;
-
-    for (int i = 0; i <= 10; i ++) {
-        x1 = (rand()%MAX_X);
-        y1 = (rand()%MAX_Y);
-        x2 = (rand()%MAX_X);
-        y2 = (rand()%MAX_Y);
-
-        drawLineDDA(x1, y1, x2, y2, RAND_COLOUR(), RAND_COLOUR(), RAND_COLOUR());
-    }
-    return;
-}
-
-/*
-    Takes in 3 co-ordinate points and 3 colour values.
-    Draws a triangle using small boxs representing a pixel to the screen and fills them with given colour
-    \param p: struct with 2 integers between 1 and 20 representing x and y
-    \param r, g and b: double between 0 and 0.256
- */
-void fillTriangle(point p1, point p2, point p3, double R, double G, double B) {
-    // Find out top and bottom points
-    int topx, topy, botx, boty;
-    if (p1.y >= p2.y && p1.y >= p3.y) {
-        topx = p1.x;
-        topy = p1.y;
-        if (p2.y > p3.y) {
-            botx = p3.x;
-            boty = p3.y;
-        } else {
-            botx = p2.x;
-            boty = p2.y;
-        }
-    } else if (p2.y >= p1.y && p2.y >= p3.y) {
-        topx = p2.x;
-        topy = p2.y;
-        if (p1.y > p3.y) {
-            botx = p3.x;
-            boty = p3.y;
-        } else {
-            botx = p1.x;
-            boty = p1.y;
-        }
-    } else {
-        topx = p3.x;
-        topy = p3.y;
-        if (p2.y > p1.y) {
-            botx = p1.x;
-            boty = p1.y;
-        } else {
-            botx = p2.x;
-            boty = p2.y;
-        }
-    }
-    point points[3] = {p1, p2, p3};
-
-    int size_of_array = (topy - boty);
-    vector<vector<int>> x_at_y(size_of_array);
-    for (int i = 0; i < 3; i++) {
-        int warp_i = i + 1;
-        if (i == 2)
-            warp_i = 0;
-        if (points[i].x == points[warp_i].x) { // If vertical line (x is same)
-            int bottom = (points[i].y < points[warp_i].y) ? points[i].y : points[warp_i].y;
-            int top = (points[i].y > points[warp_i].y) ? points[i].y : points[warp_i].y;
-            for (int j = bottom - boty; j < top - boty; j++) { // Add x value to vector for values starting at the bottom to the top
-                x_at_y[j].push_back(points[i].x);
-            }
-        } else if (points[i].y != points[warp_i].y) { // Not horizontal (so at an angle)
-            int bottom_y = (points[i].y < points[warp_i].y) ? points[i].y : points[warp_i].y;
-            int bottom_x = (points[i].y < points[warp_i].y) ? points[i].x : points[warp_i].x;
-
-            int top_y = (points[i].y > points[warp_i].y) ? points[i].y : points[warp_i].y;
-            int top_x = (points[i].y > points[warp_i].y) ? points[i].x : points[warp_i].x;
-
-            // Calculate gradient
-            vector<int> xy = drawLineDDA(bottom_x, bottom_y, top_x, top_y, 1, 1, 1);
-            int k = 0;
-            for (int j = bottom_y - boty; j < top_y - boty; j++) { // Add x value to vector for values starting at the bottom to the top
-                x_at_y[j].push_back(xy[k]);
-                k++;
-            }
-        } // Horizontal lines do nothing
-    }
-    // Draw the lines for filling triangle
-    for (int y = 0; y < topy - boty; y++) {
-        if (x_at_y[y][0] != x_at_y[y][1])
-            drawLineDDA(x_at_y[y][0], y + boty + 1, x_at_y[y][1], y + boty + 1, R, G, B);
-    }
-    // Draw lines for outline
-    drawLineDDA(p1.x, p1.y, p2.x, p2.y, 1, 1, 1);
-    drawLineDDA(p2.x, p2.y, p3.x, p3.y, 1, 1, 1);
-    drawLineDDA(p3.x, p3.y, p1.x, p1.y, 1, 1, 1);
-}
-
-/*
-    Takes in 4 co-ordinate points
-    Returns true if points a and b are on the same side
-    \param a, b, I1, I2: struct with 2 integers between 1 and 20 representing x and y
- */
-bool same_side(point a, point b, point I1, point I2) {
-    // I1 and I2 are ends of the line
-    int apt = (a.x - I1.x) * (I2.y - I1.y) - (I2.x - I1.x) * (a.y - I1.y);
-    int bpt = (b.x - I1.x) * (I2.y - I1.y) - (I2.x - I1.x) * (b.y - I1.y);
-    // Returns true if both a and b are on the same side
-    return ((apt * bpt) > 0);
-}
-
-/*
-    Takes in 4 co-ordinate points
-    Returns true if a point p is inside a triangle formed out of points a, b and c
-    \param p, a, b, c: struct with 2 integers between 1 and 20 representing x and y
- */
-bool inside(point p, point a, point b, point c) {
-    return same_side(p, a, b, c) && same_side(p, b, a, c) && same_side(p, c, b, a);
-}
-
-/*
-    Takes in an array of co-ordinate points and 3 co-ordinate points that form a triangle
-    Returns true if a point p is inside a triangle formed out of points a, b and c
-    \param points: vector of struct with 2 integers between 1 and 20 representing x and y
-    \param a, b, c: struct with 2 integers between 1 and 20 representing x and y
- */
-bool check_inside_polygon(vector<point> points, point vertex_a, point vertex_b, point vertex_c) {
-    // Find min and max points
-    point min, max;
-    if (vertex_a.x < vertex_b.x && vertex_a.x < vertex_c.x) {
-        min.x = vertex_a.x;
-        min.y = vertex_a.y;
-        if (vertex_b.x > vertex_c.x) {
-            max.x = vertex_b.x;
-            max.y = vertex_b.y;
-        }
-        else {
-            max.x = vertex_c.x;
-            max.y = vertex_c.y;
-        }
-    } else if (vertex_b.x < vertex_a.x && vertex_b.x < vertex_c.x) {
-        min.x = vertex_b.x;
-        min.y = vertex_b.y;
-        if (vertex_a.x > vertex_c.x) {
-            max.x = vertex_a.x;
-            max.y = vertex_a.y;
-        }
-        else {
-            max.x = vertex_c.x;
-            max.y = vertex_c.y;
-        }
-    } else {
-        min.x = vertex_c.x;
-        min.y = vertex_c.y;
-        if (vertex_a.x > vertex_b.x) {
-            max.x = vertex_a.x;
-            max.y = vertex_a.y;
-        }
-        else {
-            max.x = vertex_b.x;
-            max.y = vertex_b.y;
-        }
-    }
-    
-    // Check if point inside rectangle
-    for (int y = 0; y < points.size(); y++) {
-        if (y != vertex_a.y && y != vertex_b.y && y != vertex_c.y) {
-            int px = points[y].y;
-            if (!(px < min.x && px > max.x && y < min.y && y > max.y)) {
-                // Point inside rectangle, now do inside triangle test
-                point p;
-                p.x = px;
-                p.y = y;
-                if (inside(p, vertex_a, vertex_b, vertex_c)) {
-                    // Point is inside triangle
-                    return true;
-                }
-            }
-        }
-    }
-    return false;
-}
-
-/*
-    Takes in an array of co-ordinate points and 3 co-ordinate points that form a triangle
-    Returns true if a point p is inside a triangle formed out of points a, b and c
-    \param points: vector of struct with 2 integers between 1 and 20 representing x and y
-    \param r, g and b: double between 0 and 0.256
- */
-void drawPolygon(vector<point> points, double R, double G, double B) {
-    vector<int> used = {}; // stores index of used points
-    while (used.size() < points.size()) {
-        // Find leftmost vertex
-        point vertex_a = {999999999, -1};
-        int vertex_a_index = -1;
-        for (int i = 0; i < points.size(); i++) {
-            if (find(used.begin(), used.end(), i) == used.end() && points[i].x < vertex_a.x) {
-                vertex_a = points[i];
-                vertex_a_index = i;
-            }
-        }
-    
-        if (vertex_a_index == -1)
-            exit(1);
-
-        used.push_back(vertex_a_index);
-        // Form triangle with 2 adjacent vertices
-        point vertex_b, vertex_c;
-        if (vertex_a_index + 1 < points.size()) // Make sure the next index isn't out of bounds, if so, wrap around
-            vertex_b = {points[vertex_a_index + 1].x, points[vertex_a_index + 1].y};
-        else
-            vertex_b = {points[0].x, points[0].y};
-        if (vertex_a_index != 0) // Make sure the previous index isn't out of bounds, if so, wrap around
-            vertex_c = {points[vertex_a_index - 1].x, points[vertex_a_index - 1].y};
-        else
-            vertex_c = {points[points.size() - 1].x, points[points.size() - 1].y};
-
-        if (!check_inside_polygon(points, vertex_a, vertex_b, vertex_c)) { // If no of the points are in the triangle
-            fillTriangle(vertex_a, vertex_b, vertex_c, RAND_COLOUR(), RAND_COLOUR(), RAND_COLOUR());
-        }
-    }
-
-}
 
 
 void transform(int x, int y, int z, int tx, int ty, int tz) {
-	// int col, row = 4;
-	// valarray<int> t( row * col );
-	// t[ std::slice( 0 * row, row, 1 ) ] = {1, 0, 0, tx}; // Set 1st row to
-	// t[ std::slice( 1 * row, row, 1 ) ] = {0, 1, 0, ty}; // Set 2nd row to
-	// t[ std::slice( 2 * row, row, 1 ) ] = {0, 0, 1, tz}; // Set 3rd row to
-	// t[ std::slice( 3 * row, row, 1 ) ] = {0, 0, 0, 1}; // Set 4th row to
-
-	// valarray<int> p( 1 * col );
-	// p[ std::slice( 0, col, 1 ) ] = {tx, ty, tz, 1}; // Set 1st column to
-
-	// valarray<int> pt = t * p;
 	matrix t(4, 4);
 	t.set_row(0, vector<int> {1, 0, 0, tx});
 	t.set_row(1, vector<int> {0, 1, 0, ty});
@@ -346,12 +41,6 @@ void transform(int x, int y, int z, int tx, int ty, int tz) {
 	p1 = t.multiply(p);
 	p1.print();
 
-
-	// matrix test = matrix(3, 3);
-	// test.print();
-	// vector<int> das = {1, 2, 3};
-	// test.set_col(2, das);
-	// test.print();
 	
 
 	
@@ -364,7 +53,7 @@ static void display(void)
 
     //randomPixels();
     //drawLineDDA(13, 10, -12, -9);
-    // randomLines();
+    randomLines();
     // setPixel(20, 20, 1, 1, 1);
 
     // point a = {1, 15};
@@ -380,8 +69,8 @@ static void display(void)
     // setPixel(d.x, d.y, 0.5, 0.5, 0.5);
     // setPixel(e.x, e.y, 0.5, 0.5, 0.5);
 
-	transform(1, 1, 1, 2, 2, 2);
-	exit(1);
+	// transform(1, 1, 1, 2, 2, 2);
+	// exit(1);
 
     glutSwapBuffers();
 }
