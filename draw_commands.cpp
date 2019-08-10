@@ -9,6 +9,8 @@
 #include "structs.h"
 #include "draw_commands.h"
 
+#define EPSILON 0.000001
+
 using namespace std;
 
 /*
@@ -203,7 +205,42 @@ bool same_side(point a, point b, point I1, point I2) {
     \param p, a, b, c: struct with 2 integers between 1 and 20 representing x and y
  */
 bool inside(point p, point a, point b, point c) {
-    return same_side(p, a, b, c) && same_side(p, b, a, c) && same_side(p, c, b, a);
+	return same_side(p, a, b, c) && same_side(p, b, a, c) && same_side(p, c, a, b);
+    // return same_side(p, a, b, c) && same_side(p, b, c, a) && same_side(p, c, a, b);
+}
+
+int find_max_point(vector<point> points, char type) {
+	int max = -999999;
+	for (int i = 0; i < points.size(); i ++) {
+		if (type == 'x') {
+			if (points[i].x > max)
+				max = points[i].x;
+		} else if (type == 'y') {
+			if (points[i].y > max)
+				max = points[i].y;
+		} else {
+			cerr << "ERROR: Invalid type given to find_max_point" << endl;
+			exit(3);
+		}
+	}
+	return max;
+}
+
+int find_min_point(vector<point> points, char type) {
+	int min = 99999999;
+	for (int i = 0; i < points.size(); i ++) {
+		if (type == 'x') {
+			if (points[i].x < min)
+				min = points[i].x;
+		} else if (type == 'y') {
+			if (points[i].y < min)
+				min = points[i].y;
+		} else {
+			cerr << "ERROR: Invalid type given to find_min_point" << endl;
+			exit(3);
+		}
+	}
+	return min;
 }
 
 /*
@@ -214,59 +251,60 @@ bool inside(point p, point a, point b, point c) {
  */
 bool check_inside_polygon(vector<point> points, point vertex_a, point vertex_b, point vertex_c) {
     // Find min and max points
-    point min, max;
-    if (vertex_a.x < vertex_b.x && vertex_a.x < vertex_c.x) {
-        min.x = vertex_a.x;
-        min.y = vertex_a.y;
-        if (vertex_b.x > vertex_c.x) {
-            max.x = vertex_b.x;
-            max.y = vertex_b.y;
-        }
-        else {
-            max.x = vertex_c.x;
-            max.y = vertex_c.y;
-        }
-    } else if (vertex_b.x < vertex_a.x && vertex_b.x < vertex_c.x) {
-        min.x = vertex_b.x;
-        min.y = vertex_b.y;
-        if (vertex_a.x > vertex_c.x) {
-            max.x = vertex_a.x;
-            max.y = vertex_a.y;
-        }
-        else {
-            max.x = vertex_c.x;
-            max.y = vertex_c.y;
-        }
-    } else {
-        min.x = vertex_c.x;
-        min.y = vertex_c.y;
-        if (vertex_a.x > vertex_b.x) {
-            max.x = vertex_a.x;
-            max.y = vertex_a.y;
-        }
-        else {
-            max.x = vertex_b.x;
-            max.y = vertex_b.y;
-        }
-    }
-    
+    int min_x, min_y, max_x, max_y;
+	vector<point> point_list = {vertex_a, vertex_b, vertex_c};
+    min_x = find_min_point(point_list, 'x');
+	max_x = find_max_point(point_list, 'x');
+	min_y = find_min_point(point_list, 'y');
+	max_y = find_max_point(point_list, 'y');
+
     // Check if point inside rectangle
-    for (int y = 0; y < points.size(); y++) {
-        if (y != vertex_a.y && y != vertex_b.y && y != vertex_c.y) {
-            int px = points[y].y;
-            if (!(px < min.x && px > max.x && y < min.y && y > max.y)) {
+    for (int i = 0; i < points.size(); i++) {
+        // if (y != vertex_a.y && y != vertex_b.y && y != vertex_c.y) {
+            int px = points[i].x;
+			int py = points[i].y;
+            if (!(px < min_x && px > max_x && py < min_y && py > max_y)) {
                 // Point inside rectangle, now do inside triangle test
-                point p;
-                p.x = px;
-                p.y = y;
-                if (inside(p, vertex_a, vertex_b, vertex_c)) {
+                if (inside(points[i], vertex_a, vertex_b, vertex_c)) {
                     // Point is inside triangle
+					// cout << "Not drawing" << endl;
                     return true;
                 }
             }
-        }
+        // }
     }
     return false;
+}
+
+bool intersects(point p1, point p2, point p3, point p4) {
+	// Store the values for fast access and easy
+	// equations-to-code conversion
+	float x1 = p1.x, x2 = p2.x, x3 = p3.x, x4 = p4.x;
+	float y1 = p1.y, y2 = p2.y, y3 = p3.y, y4 = p4.y;
+	
+	float d = (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4);
+	// If d is zero, there is no intersection
+	if (d == 0)
+		return false;	
+	
+	// Get the x and y
+	float pre = (x1*y2 - y1*x2), post = (x3*y4 - y3*x4);
+	float x = ( pre * (x3 - x4) - (x1 - x2) * post ) / d;
+	float y = ( pre * (y3 - y4) - (y1 - y2) * post ) / d;
+	
+	// Check if the x and y coordinates are within both lines
+	if ( x < min(x1, x2) - EPSILON || x > max(x1, x2) + EPSILON || x < min(x3, x4) - EPSILON || x > max(x3, x4) + EPSILON ) 
+		return false;
+	if ( y < min(y1, y2) - EPSILON || y > max(y1, y2) + EPSILON || y < min(y3, y4) - EPSILON || y > max(y3, y4) + EPSILON )
+		return false;
+	
+	// If the point of intersection is at any of the given points, then return false as they are allowed to intersect there
+	point point_array[4] = {p1, p2, p3, p4};
+	for (int i = 0; i < 4; i++) {
+		if (x == point_array[i].x && y == point_array[i].y)
+			return false;
+	}
+	return true;
 }
 
 /*
@@ -277,6 +315,7 @@ bool check_inside_polygon(vector<point> points, point vertex_a, point vertex_b, 
  */
 void drawPolygon(vector<point> points, colour RGB) {
     vector<int> used = {}; // stores index of used points
+	vector<vector<point>> drawn_lines;
     while (used.size() < points.size()) {
         // Find leftmost vertex
         point vertex_a = {999999999, -1};
@@ -304,9 +343,27 @@ void drawPolygon(vector<point> points, colour RGB) {
             vertex_c = {points[points.size() - 1].x, points[points.size() - 1].y};
 
         if (!check_inside_polygon(points, vertex_a, vertex_b, vertex_c)) { // If no of the points are in the triangle
-			colour randomColour = {RAND_COLOUR(), RAND_COLOUR(), RAND_COLOUR()};
-            fillTriangle(vertex_a, vertex_b, vertex_c, randomColour);
+			bool lines_intersect = false; 
+			for (int i = 0; i < drawn_lines.size(); i++) {
+				if (intersects(vertex_a, vertex_b, drawn_lines[i][0], drawn_lines[i][1]) || 
+					intersects(vertex_a, vertex_c, drawn_lines[i][0], drawn_lines[i][1]) ||
+					intersects(vertex_b, vertex_c, drawn_lines[i][0], drawn_lines[i][1])) {
+						// cout << "Intersects: " << intersects(vertex_a, vertex_b, drawn_lines[i][0], drawn_lines[i][1]) << endl;
+						lines_intersect = true;
+						break;
+					}
+			}
+			if (!lines_intersect) { // If the lines to draw this triangle don't intersect with any previously drawn
+				// colour randomColour = {RAND_COLOUR(), RAND_COLOUR(), RAND_COLOUR()};
+				fillTriangle(vertex_a, vertex_b, vertex_c, RGB);
+				drawn_lines.push_back({vertex_a, vertex_b});
+				drawn_lines.push_back({vertex_a, vertex_c});
+				drawn_lines.push_back({vertex_b, vertex_c});
+			}
         }
     }
-
+	// Puts grey pixels on each point
+	for (int i = 0; i < points.size(); i++) {
+		setPixel(points[i], {0.5, 0.5, 0.5});
+	}
 }
