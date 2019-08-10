@@ -53,24 +53,29 @@ static void display(void)
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     
+	// Weird shape
+    // point a = {1, 15};
+    // point b = {5, 19};
+    // point c = {3, 12};
+    // point d = {15, 1};
+    // point e = {2, 1};
+    // vector<point> points = {a, b, c, d, e};
 
-    point a = {1, 15};
-    point b = {5, 19};
-    point c = {3, 12};
-    point d = {15, 1};
-    point e = {2, 1};
-    vector<point> points = {a, b, c, d, e};
+	// Square
+	point a = {1, 5};
+    point b = {5, 5};
+    point c = {5, 1};
+    point d = {1, 1};
+    vector<point> points = {a, b, c, d};
 
-	Polygon testpoly(points);
+	Polygon testpoly(points, {6, 6});
+	testpoly.set_colour({0.25, 0.5, 0.75});
+	// testpoly.translate(2, 2);
+	testpoly.scale(2, 2);
 	testpoly.draw();
 	// drawLineDDA({1, 1}, {10, 10}, {1, 1, 1});
 	// setPixel({1, 1}, {0.1, 0.1, 0.1});
-    // drawPolygon(points, RAND_COLOUR(), RAND_COLOUR(), RAND_COLOUR());
-    // setPixel(a.x, a.y, 0.5, 0.5, 0.5);
-    // setPixel(b.x, b.y, 0.5, 0.5, 0.5);
-    // setPixel(c.x, c.y, 0.5, 0.5, 0.5);
-    // setPixel(d.x, d.y, 0.5, 0.5, 0.5);
-    // setPixel(e.x, e.y, 0.5, 0.5, 0.5);
+
 
 	// transform(1, 1, 1, 2, 2, 2);
 	// exit(1);
