@@ -23,29 +23,6 @@ static void resize(int width, int height) {
 }
 
 
-void transform(int x, int y, int z, int tx, int ty, int tz) {
-	matrix t(4, 4);
-	t.set_row(0, vector<int> {1, 0, 0, tx});
-	t.set_row(1, vector<int> {0, 1, 0, ty});
-	t.set_row(2, vector<int> {0, 0, 1, tz});
-	t.set_row(3, vector<int> {0, 0, 0, 1});
-	t.print();
-	cout << endl;
-
-	matrix p(4, 1);
-	p.set_col(0, vector<int> {x, y, z, 1});
-	p.print();
-
-	cout << endl;
-
-	matrix p1(4, 1);
-	p1 = t.multiply(p);
-	p1.print();
-
-	
-
-	
-}
 
 // What to display
 static void display(void)
@@ -71,7 +48,8 @@ static void display(void)
 	Polygon testpoly(points, {6, 6});
 	testpoly.set_colour({0.25, 0.5, 0.75});
 	// testpoly.translate(2, 2);
-	// testpoly.scale(2, 2);
+	testpoly.scale(2, 2);
+	// testpoly.rotate(180);
 	testpoly.draw();
 	// drawLineDDA({1, 1}, {10, 10}, {1, 1, 1});
 	// setPixel({1, 1}, {0.1, 0.1, 0.1});

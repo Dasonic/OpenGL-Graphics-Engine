@@ -6,7 +6,7 @@ using namespace std;
 
 
 matrix::matrix(int rows, int cols) {
-	std::vector<std::vector<int>> m(rows, std::vector<int>(cols, 0));
+	std::vector<std::vector<double>> m(rows, std::vector<double>(cols, 0));
 	pm = m;
 	num_rows = rows;
 	num_cols = cols;
@@ -23,7 +23,7 @@ void matrix::print() {
 	return;
 }
 
-void matrix::set_row(int row_number, std::vector<int> row) {
+void matrix::set_row(int row_number, std::vector<double> row) {
 	if (row_number >= num_rows || row_number < 0) {
 		cerr << "ERROR: Invalid row index to set" << endl;
 		exit(2);
@@ -33,7 +33,7 @@ void matrix::set_row(int row_number, std::vector<int> row) {
 	return;
 }
 
-void matrix::set_col(int col_number, std::vector<int> col) {
+void matrix::set_col(int col_number, std::vector<double> col) {
 	if (num_rows < col.size()) {
 		cerr << "ERROR: Too many rows to set col" << endl;
 		exit(2);
@@ -49,12 +49,12 @@ void matrix::set_col(int col_number, std::vector<int> col) {
 	return;
 }
 
-void matrix::set_val(int row_number, int col_number, int val) {
+void matrix::set_val(int row_number, int col_number, double val) {
 	pm[row_number][col_number] = val;
 	return;
 }
 
-void matrix::add_val(int row_number, int col_number, int val) {
+void matrix::add_val(int row_number, int col_number, double val) {
 	pm[row_number][col_number] += val;
 	return;
 }
