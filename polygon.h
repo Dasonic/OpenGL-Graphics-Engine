@@ -6,7 +6,7 @@
 	class Polygon {
 		std::vector<point> point_list;
 		matrix *transform_matrix;
-		matrix *scale_matrix;
+		// matrix *scale_matrix;
 		matrix *coords;
 		colour fill_colour;
 		public:
