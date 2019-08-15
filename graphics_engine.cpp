@@ -39,20 +39,23 @@ static void display(void)
     // vector<point> points = {a, b, c, d, e};
 
 	// Square
-	point a = {1, 5};
-    point b = {5, 5};
-    point c = {5, 1};
-    point d = {1, 1};
+	point a = {-3, 3};
+    point b = {3, 3};
+    point c = {-3, -3};
+    point d = {3, -3};
     vector<point> points = {a, b, c, d};
 
-	Polygon testpoly(points, {6, 6});
+	Polygon testpoly(points, {8, 8});
 	testpoly.set_colour({0.25, 0.5, 0.75});
 	// testpoly.translate(2, 2);
 	testpoly.scale(2, 2);
 	// testpoly.rotate(180);
 	testpoly.draw();
 	// drawLineDDA({1, 1}, {10, 10}, {1, 1, 1});
-	// setPixel({1, 1}, {0.1, 0.1, 0.1});
+	setPixel({8, 8}, {0.1, 0.1, 0.1});
+	// setPixel({2, 8}, {0.1, 0.1, 0.1});
+	// setPixel({3, 8}, {0.1, 0.1, 0.1});
+	// setPixel({4, 8}, {0.1, 0.1, 0.1});
 
 
 	// transform(1, 1, 1, 2, 2, 2);
