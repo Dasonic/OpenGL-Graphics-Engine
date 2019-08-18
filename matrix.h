@@ -12,10 +12,11 @@
 			void set_col(int col_number, std::vector<double> col);
 			void set_val(int row_number, int col_number, double val);
 			void add_val(int row_number, int col_number, double val);
-			int get_val(int row_number, int col_number);
+			double get_val(int row_number, int col_number);
 			int get_rows();
 			int get_cols();
 			void print();
 			matrix multiply(matrix other_matrix);
+			void set_up_transformation();
 	};
 #endif

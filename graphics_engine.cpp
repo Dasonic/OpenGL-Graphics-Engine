@@ -18,7 +18,7 @@ static void resize(int width, int height) {
     glClearColor(0.0, 0.0, 0.0, 0.0);         // black background
     glMatrixMode(GL_PROJECTION);              // setup viewing projection
     glLoadIdentity();                           // start with identity matrix
-    glOrtho(0.0, 10.0, 0.0, 10.0, -1.0, 1.0);   // setup a 10x10x2 viewing world
+    glOrtho(0.0, 20.0, 0.0, 20.0, -1.0, 1.0);   // setup a 20x20x2 viewing world
     // glOrtho(0.0, width * SCALE, 0.0, height * SCALE, -1.0, 1.0);   // setup a dynanically sized viewing world
 }
 
@@ -31,34 +31,32 @@ static void display(void)
 
     
 	// Weird shape
-    // point a = {1, 15};
-    // point b = {5, 19};
-    // point c = {3, 12};
-    // point d = {15, 1};
-    // point e = {2, 1};
-    // vector<point> points = {a, b, c, d, e};
+    point a = {0, 5};
+    point b = {8, 5};
+    point c = {-4, 0};
+    point d = {3, 0};
+    point e = {0, -5};
+	point f = {5, -4};
+	point g = {8, -7};
+	point h = {10, -3};
+    vector<point> points = {a, b, c, d, e, f, g, h};
 
 	// Square
-	point a = {-3, 3};
-    point b = {3, 3};
-    point c = {-3, -3};
-    point d = {3, -3};
-    vector<point> points = {a, b, c, d};
+	// point a = {-3, 3};
+    // point b = {3, 3};
+    // point c = {-3, -3};
+    // point d = {3, -3};
+    // vector<point> points = {a, b, c, d};
 
-	Polygon testpoly(points, {8, 8});
+	Polygon testpoly(points, {12, 12});
 	testpoly.set_colour({0.25, 0.5, 0.75});
-	// testpoly.translate(2, 2);
-	testpoly.scale(2, 2);
-	// testpoly.rotate(180);
+	// // testpoly.translate(2, 2);
+	// // testpoly.scale(2, 2);
+	// testpoly.scale(2, 2);
+	// testpoly.rotate(80);
 	testpoly.draw();
-	// drawLineDDA({1, 1}, {10, 10}, {1, 1, 1});
-	setPixel({8, 8}, {0.1, 0.1, 0.1});
-	// setPixel({2, 8}, {0.1, 0.1, 0.1});
-	// setPixel({3, 8}, {0.1, 0.1, 0.1});
-	// setPixel({4, 8}, {0.1, 0.1, 0.1});
+	setPixel({12, 12}, {0.4, 0.2, 0.3});
 
-
-	// transform(1, 1, 1, 2, 2, 2);
 	// exit(1);
 
     glutSwapBuffers();

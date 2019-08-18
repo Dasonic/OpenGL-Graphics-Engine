@@ -49,7 +49,7 @@ void randomPixels() {
     \param p1, p2: struct with 2 integers between 1 and 20 representing x and y
     \param RGB: struct with 3 doubles between 0 and 0.256
  */
-vector<int> drawLineDDA(point p1, point p2, colour RGB) {
+void drawLineDDA(point p1, point p2, colour RGB, int* x_at_y) {
     int dx = p2.x - p1.x;
     int dy = p2.y - p1.y;
     int steps;
@@ -66,18 +66,47 @@ vector<int> drawLineDDA(point p1, point p2, colour RGB) {
     double y = p1.y;
 	p.x = ROUND(x);
 	p.y = ROUND(y);
+	x_at_y[0] = p.x;
 
-    vector<int> x_at_y;
+	int bottom_y = (p1.y < p2.y) ? p1.y : p2.y;
+
+    for (int i = 0; i < steps; i++) {
+        x += x_inc;
+        y += y_inc;
+		p.x = ROUND(x);
+		p.y = ROUND(y);
+		x_at_y[p.y - bottom_y] = p.x;
+    }
+    return;
+}
+
+void drawLineDDA(point p1, point p2, colour RGB) {
+	int dx = p2.x - p1.x;
+    int dy = p2.y - p1.y;
+    int steps;
+    
+    if (abs(dx) > abs(dy))
+        steps = abs(dx);
+    else
+        steps = abs(dy);
+    double x_inc = dx / (double) steps;
+    double y_inc = dy / (double) steps;
+
+	point p;
+    double x = p1.x;
+    double y = p1.y;
+	p.x = ROUND(x);
+	p.y = ROUND(y);
+
     setPixel(p, RGB);
     for (int i = 0; i < steps; i++) {
         x += x_inc;
         y += y_inc;
-        x_at_y.push_back(ROUND(x));
 		p.x = ROUND(x);
 		p.y = ROUND(y);
         setPixel(p, RGB);
     }
-    return x_at_y;
+    return;
 }
 
 /*
@@ -108,75 +137,69 @@ void randomLines() {
 void fillTriangle(point p1, point p2, point p3, colour RGB) {
 	colour white = {1, 1, 1};
     // Find out top and bottom points
-    int topx, topy, botx, boty;
+    point top, bot;
     if (p1.y >= p2.y && p1.y >= p3.y) {
-        topx = p1.x;
-        topy = p1.y;
+        top = p1;
         if (p2.y > p3.y) {
-            botx = p3.x;
-            boty = p3.y;
+            bot = p3;
         } else {
-            botx = p2.x;
-            boty = p2.y;
+            bot = p2;
         }
     } else if (p2.y >= p1.y && p2.y >= p3.y) {
-        topx = p2.x;
-        topy = p2.y;
+        top = p2;
         if (p1.y > p3.y) {
-            botx = p3.x;
-            boty = p3.y;
+            bot = p3;
         } else {
-            botx = p1.x;
-            boty = p1.y;
+            bot = p1;
         }
     } else {
-        topx = p3.x;
-        topy = p3.y;
+        top = p3;
         if (p2.y > p1.y) {
-            botx = p1.x;
-            boty = p1.y;
+            bot = p1;
         } else {
-            botx = p2.x;
-            boty = p2.y;
+            bot = p2;
         }
     }
     point points[3] = {p1, p2, p3};
 
-    int size_of_array = (topy - boty);
+    int size_of_array = (top.y - bot.y);
     vector<vector<int>> x_at_y(size_of_array);
     for (int i = 0; i < 3; i++) {
-        int warp_i = i + 1;
+        int next_i = i + 1;
+		// If next i is out of index, then loop around to 0
         if (i == 2)
-            warp_i = 0;
-        if (points[i].x == points[warp_i].x) { // If vertical line (x is same)
-            int bottom = (points[i].y < points[warp_i].y) ? points[i].y : points[warp_i].y;
-            int top = (points[i].y > points[warp_i].y) ? points[i].y : points[warp_i].y;
-            for (int j = bottom - boty; j < top - boty; j++) { // Add x value to vector for values starting at the bottom to the top
+            next_i = 0;
+
+        if (points[i].x == points[next_i].x) { // If vertical line (x is same)
+            int lower = (points[i].y < points[next_i].y) ? points[i].y : points[next_i].y;
+            int higher = (points[i].y > points[next_i].y) ? points[i].y : points[next_i].y;
+            for (int j = lower - bot.y; j < higher - bot.y; j++) { // Add x value to vector for values starting at the bottom to the top
                 x_at_y[j].push_back(points[i].x);
             }
-        } else if (points[i].y != points[warp_i].y) { // Not horizontal (so at an angle)
-			point bottom;
-            bottom.y = (points[i].y < points[warp_i].y) ? points[i].y : points[warp_i].y;
-            bottom.x = (points[i].y < points[warp_i].y) ? points[i].x : points[warp_i].x;
+        } else if (points[i].y != points[next_i].y) { // Not horizontal (so at an angle)
+			point lower;
+            lower.y = (points[i].y < points[next_i].y) ? points[i].y : points[next_i].y;
+            lower.x = (points[i].y < points[next_i].y) ? points[i].x : points[next_i].x;
 
-			point top;
-            top.y = (points[i].y > points[warp_i].y) ? points[i].y : points[warp_i].y;
-            top.x = (points[i].y > points[warp_i].y) ? points[i].x : points[warp_i].x;
+			point higher;
+            higher.y = (points[i].y > points[next_i].y) ? points[i].y : points[next_i].y;
+            higher.x = (points[i].y > points[next_i].y) ? points[i].x : points[next_i].x;
 
             // Calculate gradient
-            vector<int> xy = drawLineDDA(bottom, top, white);
+			int xy[higher.y - lower.y] = {0};
+            drawLineDDA(lower, higher, white, xy);
             int k = 0;
-            for (int j = bottom.y - boty; j < top.y - boty; j++) { // Add x value to vector for values starting at the bottom to the top
+            for (int j = lower.y - bot.y; j < higher.y - bot.y; j++) { // Add x value to vector for values starting at the bottom to the top
                 x_at_y[j].push_back(xy[k]);
                 k++;
             }
         } // Horizontal lines do nothing
     }
     // Draw the lines for filling triangle
-    for (int y = 0; y < topy - boty; y++) {
+    for (int y = 0; y < top.y - bot.y; y++) {
         if (x_at_y[y][0] != x_at_y[y][1]) {
-			point fp = {x_at_y[y][0], y + boty + 1}; // First point
-			point sp = {x_at_y[y][1], y + boty + 1}; // Second point
+			point fp = {x_at_y[y][0], y + bot.y}; // First point
+			point sp = {x_at_y[y][1], y + bot.y}; // Second point
             drawLineDDA(fp, sp, RGB);
 		}
     }

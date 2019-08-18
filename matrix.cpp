@@ -59,7 +59,7 @@ void matrix::add_val(int row_number, int col_number, double val) {
 	return;
 }
 
-int matrix::get_val(int row_number, int col_number) {
+double matrix::get_val(int row_number, int col_number) {
 	return pm[row_number][col_number];
 }
 
@@ -77,9 +77,19 @@ matrix matrix::multiply(matrix other_matrix) {
 	for(int i = 0; i < num_rows; i++) {
 		for (int j = 0; j < other_matrix.get_cols(); j++) {
             for(int k = 0; k < num_cols; k++) {
-               product_matrix.add_val(i, j, pm[i][k] * other_matrix.get_val(k, j));
+            	product_matrix.add_val(i, j, pm[i][k] * other_matrix.get_val(k, j));
             } 
 		}
 	}
 	return product_matrix;
+}
+
+void matrix::set_up_transformation() {
+
+	set_row(0, {1, 0, 0, 0});
+	set_row(1, {0, 1, 0, 0});
+	set_row(2, {0, 0, 1, 0});
+	set_row(3, {0, 0, 0, 1});
+
+	return;
 }

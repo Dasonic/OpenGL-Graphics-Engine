@@ -4,8 +4,8 @@
 	#include "structs.h"
 
 	#define SCALE 0.5
-	#define MAX_X 20
-	#define MAX_Y 20
+	#define MAX_X 40
+	#define MAX_Y 40
 	#define RAND_COLOUR() (double)(rand()%256)/100
 	#define ROUND(x) ((int)(x + 0.5))
 	
@@ -15,7 +15,8 @@
 
 	void setPixel(point p, colour RGB);
 	void randomPixels();
-	std::vector<int> drawLineDDA(point p1, point p2, colour RGB);
+	void drawLineDDA(point p1, point p2, colour RGB, int* x_at_y);
+	void drawLineDDA(point p1, point p2, colour RGB);
 	void randomLines();
 	void fillTriangle(point p1, point p2, point p3, colour RGB);
 	void drawPolygon(std::vector<point> points, colour RGB);
