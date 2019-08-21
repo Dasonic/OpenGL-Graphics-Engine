@@ -20,10 +20,13 @@ Polygon::Polygon(std::vector<point> points, point coordinates) {
 	transform_matrix.set_row(3, {0, 0, 0, 1});
 
 	transformation_matrix_list.push_back(transform_matrix);
-
 	coords = new matrix(4, 1);
 	coords->set_col(0, {(double)coordinates.x, (double)coordinates.y, 1, 1});
 }
+
+Polygon::Polygon(std::vector<point> points)
+:	Polygon(points, {0, 0})
+{}
 
 void Polygon::set_colour(colour RGB) {
 	fill_colour = RGB;
@@ -80,6 +83,17 @@ void Polygon::translate(int x_offset, int y_offset) {
 	transform(transform_matrix);
 }
 
+void Polygon::additive_translate(double x_offset, double y_offset) {
+	// Get current x and y
+	double x = transformation_matrix_list.back().get_val(0, 3);
+	double y = transformation_matrix_list.back().get_val(0, 3);
+
+	double new_x = x + x_offset;
+	double new_y = y + y_offset;
+
+	translate(new_x, new_y);
+}
+
 void Polygon::transform(matrix transform_matrix) {
 	// transformation_matrix_list.push_back(transform_matrix.multiply(transformation_matrix_list.back()));
 	// cout << "---------------" << endl;
@@ -89,8 +103,6 @@ void Polygon::transform(matrix transform_matrix) {
 	// cout << "=" << endl;
 	matrix temp(4, 4);
 	temp = transformation_matrix_list.back().multiply(transform_matrix);
-	// temp.print();
 	transformation_matrix_list.push_back(temp);
 	// transformation_matrix_list.back().print();
-	
 }

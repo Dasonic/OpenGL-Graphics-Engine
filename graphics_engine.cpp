@@ -9,9 +9,11 @@
 #include "structs.h"
 #include "draw_commands.h"
 #include "polygon.h"
+#include "player.h"
 
 using namespace std;
 
+Player* main_player;
 
 
 static void resize(int width, int height) {
@@ -23,41 +25,12 @@ static void resize(int width, int height) {
 }
 
 
-
 // What to display
 static void display(void)
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    
-	// Weird shape
-    point a = {0, 5};
-    point b = {8, 5};
-    point c = {-4, 0};
-    point d = {3, 0};
-    point e = {0, -5};
-	point f = {5, -4};
-	point g = {8, -7};
-	point h = {10, -3};
-    vector<point> points = {a, b, c, d, e, f, g, h};
-
-	// Square
-	// point a = {-3, 3};
-    // point b = {3, 3};
-    // point c = {-3, -3};
-    // point d = {3, -3};
-    // vector<point> points = {a, b, c, d};
-
-	Polygon testpoly(points, {12, 12});
-	testpoly.set_colour({0.25, 0.5, 0.75});
-	// // testpoly.translate(2, 2);
-	// // testpoly.scale(2, 2);
-	// testpoly.scale(2, 2);
-	// testpoly.rotate(80);
-	testpoly.draw();
-	setPixel({12, 12}, {0.4, 0.2, 0.3});
-
-	// exit(1);
+	main_player->draw();
 
     glutSwapBuffers();
 }
@@ -72,6 +45,15 @@ static void key(unsigned char key, int x, int y)
         case 'q':
             exit(0);
             break;
+		case 'w':
+			main_player->accelerate();
+			break;
+		case 'a':
+			main_player->rotate('l');
+			break;
+		case 'd':
+			main_player->rotate('r');
+			break;
     }
     glutPostRedisplay();
 }
@@ -84,6 +66,51 @@ static void idle(void)
 
 int main(int argc, char** argv)
 {
+	// Define the polygons to make up the player
+	/*
+	vector<point> player_sprite_cockpit_points = {
+			   {-1, 6}, {1, 6},
+		{-2, 4},			  {2, 4},
+		{-2, 2},			  {2, 2}
+	};
+	Polygon player_sprite_cockpit (player_sprite_cockpit_points);
+	vector<point> player_sprite_body_points = {
+			   {-2, 2},							 {2, 2},
+		{-3, 0},										  {3, 0},
+
+		{-3, -2}, {-2, -2},	      {0, -2},		 {2, -2}, {3, -2},
+					      {-1, -3}, 	  {1, -3},
+	};
+	Polygon player_sprite_body (player_sprite_body_points);
+	vector<point> player_sprite_left_wing_points = {
+			    {-5, 0},  		  {-3, 0},
+		{-6, -1},
+								  {-3, -2},
+						  {-4, -3},
+
+			    {-5, -5}, {-4, -5},
+		{-6, -6}
+	};
+	Polygon player_sprite_left_wing (player_sprite_left_wing_points);
+	vector<point> player_sprite_right_wing_points = {
+		{3, 0},		   {5, 0},
+						    	 {6, -1},
+		{3, 2},
+			   {4, -3},
+
+			   {4, -5}, {5, -5},
+			   					 {6, -6}
+	};
+	Polygon player_sprite_right_wing (player_sprite_right_wing_points);
+	
+	main_player = new Player({player_sprite_cockpit});
+	*/
+
+	vector<point> square_points = { {-3, 3}, {3, 3}, {-3, -3}, { 3, -3} };
+	Polygon square (square_points);
+	main_player = new Player({square});
+
+	
     glutInit(&argc, argv);
     glutInitWindowSize(480,480); // Size of the window (not including decorations, just usable space)
     glutInitWindowPosition(20,10); // Where on the screen the window appears (Top left of decoration for windows and linux) (x, y)

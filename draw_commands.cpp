@@ -350,8 +350,10 @@ void drawPolygon(vector<point> points, colour RGB) {
             }
         }
     
-        if (vertex_a_index == -1)
-            exit(1);
+        if (vertex_a_index == -1) {
+			cerr << "ERROR: No points given to drawPolygon" << endl;
+			exit(1);
+		}
 
         used.push_back(vertex_a_index);
         // Form triangle with 2 adjacent vertices
