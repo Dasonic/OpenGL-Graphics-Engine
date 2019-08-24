@@ -11,6 +11,7 @@ using namespace std;
 
 Polygon::Polygon(std::vector<point> points, point coordinates) {
 	point_list = points;
+	last_used_point_list = points;
 	fill_colour = {1, 1, 1};
 	matrix transform_matrix(4, 4);
 	
@@ -20,8 +21,6 @@ Polygon::Polygon(std::vector<point> points, point coordinates) {
 	transform_matrix.set_row(3, {0, 0, 0, 1});
 
 	transformation_matrix_list.push_back(transform_matrix);
-	coords = new matrix(4, 1);
-	coords->set_col(0, {(double)coordinates.x, (double)coordinates.y, 1, 1});
 }
 
 Polygon::Polygon(std::vector<point> points)
@@ -34,8 +33,8 @@ void Polygon::set_colour(colour RGB) {
 
 void Polygon::draw() {
 	matrix ts(4, 4);
-
-	std::vector<point> new_points;
+	last_used_point_list.clear();
+	
 	// cout << "---------------" << endl;
 	for (int i = 0; i < point_list.size(); i++) {
 		// Convert point to matrix
@@ -47,10 +46,10 @@ void Polygon::draw() {
 		// cout << "--" << endl;
 		// use_point.print();
 		// Add transformed points to vector
-		new_points.push_back({(int)use_point.get_val(0, 0), (int)use_point.get_val(1, 0)});
+		last_used_point_list.push_back({(int)use_point.get_val(0, 0), (int)use_point.get_val(1, 0)});
 	}
 	// Draw polygon using transformed points
-	drawPolygon(new_points, fill_colour);
+	drawPolygon(last_used_point_list, fill_colour);
 }
 void Polygon::scale(int x_scale, int y_scale) {
 	matrix transform_matrix(4, 4);
@@ -76,33 +75,39 @@ void Polygon::rotate(double angle) {
 	transform(transform_matrix);
 }
 
-void Polygon::translate(int x_offset, int y_offset) {
+void Polygon::translate(double x_offset, double y_offset) {
 	matrix transform_matrix(4, 4);
 	transform_matrix.set_up_transformation();
-	transform_matrix.set_col(3, {(double)x_offset, (double)y_offset, 1, 1});
+	transform_matrix.set_col(3, {x_offset, y_offset, 1, 1});
 	transform(transform_matrix);
 }
 
-void Polygon::additive_translate(double x_offset, double y_offset) {
-	// Get current x and y
-	double x = transformation_matrix_list.back().get_val(0, 3);
-	double y = transformation_matrix_list.back().get_val(0, 3);
-
-	double new_x = x + x_offset;
-	double new_y = y + y_offset;
-
-	translate(new_x, new_y);
-}
-
 void Polygon::transform(matrix transform_matrix) {
-	// transformation_matrix_list.push_back(transform_matrix.multiply(transformation_matrix_list.back()));
-	// cout << "---------------" << endl;
-	// transformation_matrix_list.back().print();
-	// cout << "*" << endl;
-	// transform_matrix.print();
-	// cout << "=" << endl;
 	matrix temp(4, 4);
 	temp = transformation_matrix_list.back().multiply(transform_matrix);
 	transformation_matrix_list.push_back(temp);
-	// transformation_matrix_list.back().print();
+}
+
+// Finds the smallest x value and the highest y value
+point Polygon::find_top_left_point() {
+	point top_left = {999999, -999999}; 
+	for (int i = 0; i < last_used_point_list.size(); i ++) {
+		if (last_used_point_list[i].x < top_left.x)
+			top_left.x = last_used_point_list[i].x;
+		if (last_used_point_list[i].y > top_left.y)
+			top_left.y = last_used_point_list[i].y;
+	}
+	return top_left;
+}
+
+// Finds the highest x value and the lowest y value
+point Polygon::find_bottom_right_point() {
+	point bottom_right = {-999999, 999999};
+	for (int i = 0; i < last_used_point_list.size(); i ++) {
+		if (last_used_point_list[i].x > bottom_right.x)
+			bottom_right.x = last_used_point_list[i].x;
+		if (last_used_point_list[i].y < bottom_right.y)
+			bottom_right.y = last_used_point_list[i].y;
+	}
+	return bottom_right;
 }

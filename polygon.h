@@ -5,9 +5,8 @@
 	#include "structs.h"
 	class Polygon {
 		std::vector<point> point_list;
-		// matrix *transform_matrix;
+		std::vector<point> last_used_point_list;
 		std::vector<matrix> transformation_matrix_list;
-		matrix *coords;
 		colour fill_colour;
 		public:
 			Polygon(std::vector<point> points, point coordinates);
@@ -16,8 +15,9 @@
 			void draw();
 			void scale(int x_scale, int y_scale);
 			void rotate(double angle);
-			void translate(int x_offset, int y_offset);
-			void additive_translate(double x_offset, double y_offset);
+			void translate(double x_offset, double y_offset);
 			void transform(matrix transform_matrix);
+			point find_top_left_point();
+			point find_bottom_right_point();
 	};
 #endif
