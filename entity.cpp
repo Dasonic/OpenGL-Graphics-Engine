@@ -9,7 +9,7 @@ using namespace std;
 
 void Entity::draw() {
 
-	if (movement_speed - EPSILON > 0) {
+	if (movement_speed - EPSILON > min_speed) {
 		for (int i = 0; i < sprite.size(); i++) {
 			sprite[i].translate(0, movement_speed);
 		}
@@ -44,10 +44,10 @@ void Entity::decelerate() {
 void Entity::rotate(char direction, int boundary) {
 	// If rotating left, subtract from direction
 	if (direction == 'l')
-		direction_facing += rotation_speed;
+		direction_facing += ROTATION_SPEED;
 	// If rotating right, add to direction
 	else if (direction == 'r')
-		direction_facing -= rotation_speed;
+		direction_facing -= ROTATION_SPEED;
 	// If bouncing back, flip direction
 	else if (direction == 'b')
 		if (direction_facing == 0 || direction_facing == 90 || direction_facing == 180 || direction_facing == 270)
@@ -72,9 +72,9 @@ void Entity::rotate(char direction, int boundary) {
 	
 	for (int i = 0; i < sprite.size(); i++) {
 		if (direction == 'l')
-			sprite[i].rotate(rotation_speed);
+			sprite[i].rotate(ROTATION_SPEED);
 		else if (direction == 'r')
-			sprite[i].rotate(-rotation_speed);
+			sprite[i].rotate(-ROTATION_SPEED);
 		// If bouncing back, flip direction
 		else if (direction == 'b') {
 			if (direction_facing == 0 || direction_facing == 90 || direction_facing == 180 || direction_facing == 270)

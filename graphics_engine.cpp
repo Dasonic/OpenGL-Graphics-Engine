@@ -5,19 +5,22 @@
 #include <iostream>
 #include <algorithm>
 #include <chrono>
+#include <list>
 
 #include "matrix.h"
 #include "structs.h"
 #include "draw_commands.h"
 #include "polygon.h"
 #include "player.h"
+#include "asteroid.h"
 
 using namespace std;
 
 int frame_counter = 0;
 Player* main_player;
-vector<Entity> asteroids;
+list<Asteroid> asteroids = {};
 const rectangle boundary_box[] = {{{0, 165}, {160, 159}}, {{0, 1}, {160, -5}}, {{-5, 160}, {1, 0}}, {{159, 160}, {165, 0}}};
+int score = 0;
 
 static void resize(int width, int height) {
     glClearColor(0.0, 0.0, 0.0, 0.0);         // black background
@@ -38,9 +41,34 @@ void register_collisions() {
 				main_player->set_last_collided_boundary(i);
 			}
 		}
+		// Check asteroids
+		for (list<Asteroid>::iterator asteroid=asteroids.begin(); asteroid != asteroids.end(); ++asteroid) {
+			if (asteroid->check_collision(boundary_box[i])) {
+				// If the boundary is different to the last one the asteroid collided with or a set amount of time has passed (prevents detecting same collision more than once)
+				if (asteroid->get_last_collided_boundary() != i || asteroid->get_time_since_boundary_collision(check_collision_timer) > 300000000) {
+					asteroid->bounce(i);
+					asteroid->set_last_collided_boundary(i);
+					break;
+				}
+			}
+		}
 	}
-	// Check if player out of bounds
-	// if (main_player->check_collision)
+	// Check collision with asteroids
+	for (list<Asteroid>::iterator asteroid=asteroids.begin(); asteroid != asteroids.end(); ++asteroid) {
+		if (main_player->check_collision(asteroid->get_collision_box())) {
+			// Destroy asteroid
+			asteroid->destroy();
+			asteroids.erase(asteroid++);
+			score++;
+		}
+		for (list<Asteroid>::iterator other_asteroid=asteroids.begin(); other_asteroid != asteroids.end(); ++other_asteroid) {
+			if (asteroid != other_asteroid && asteroid->check_collision(other_asteroid->get_collision_box())) {
+				asteroid->randomise_direction();
+				other_asteroid->randomise_direction();
+			}
+		}
+	}
+
 }
 
 
@@ -53,10 +81,22 @@ static void display(void)
 		register_collisions();
 		frame_counter = 0;
 	}
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	// drawLineDDA({0, 160}, {160, 160}, {0.3, 0.2, 0.1});
-	main_player->draw();
 
+	// Generate new asteroid
+	if (rand()%10000 == 0) {
+		vector<point> asteroid_graphic = {{-3, 3}, {3, 3}, {3, -3}, {-3, -3}};
+		Polygon temp_asteroid (asteroid_graphic, {50, 50});
+		Asteroid test_asteroid({temp_asteroid});
+		asteroids.push_back(test_asteroid);
+	}
+
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	// Draw the player
+	main_player->draw();
+	// Draw the asteroids
+	for (list<Asteroid>::iterator asteroid=asteroids.begin(); asteroid != asteroids.end(); ++asteroid) {
+		asteroid->draw();
+	}
     glutSwapBuffers();
 }
 
@@ -115,6 +155,7 @@ int main(int argc, char** argv)
 
 	main_player = new Player({player_sprite_cockpit, player_sprite_body, player_sprite_boosters});
 
+	srand(time(NULL));
 	
     glutInit(&argc, argv);
     glutInitWindowSize(800,800); // Size of the window (not including decorations, just usable space)

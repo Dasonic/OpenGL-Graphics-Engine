@@ -3,6 +3,7 @@
 	#include <vector>
 	#include "matrix.h"
 	#include "structs.h"
+
 	class Polygon {
 		std::vector<point> point_list;
 		std::vector<point> last_used_point_list;

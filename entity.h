@@ -7,10 +7,11 @@
 
 	#define ROUND(x) ((int)(x + 0.5))
 	#define EPSILON 0.0001
+	#define ROTATION_SPEED 45
 
 	class Entity {
 		protected:
-			double direction_facing, acceleration_value, movement_speed, max_speed, drag, rotation_speed = 0;
+			double direction_facing, acceleration_value, movement_speed, max_speed, min_speed, drag = 0;
 			std::vector<Polygon> sprite;
 			rectangle collision_box;
 			point middle_point;
