@@ -33,10 +33,11 @@ void register_collisions() {
 	// First check boundary box
 	for (int i = 0; i < 4; i++) {
 		if (main_player->check_collision(boundary_box[i])) {
-			if (main_player->get_last_collided_boundary() != i || main_player->get_time_since_boundary_collision(check_collision_timer) > 200000000) {
+			// cout << main_player->get_time_since_boundary_collision(check_collision_timer) << endl;
+			if (main_player->get_last_collided_boundary() != i || main_player->get_time_since_boundary_collision(check_collision_timer) > 300000000) {
 				out_of_bounds_counter++;
 				cout << "OUT OF BOUNDS " << out_of_bounds_counter << endl;
-				main_player->bounce();
+				main_player->bounce(i);
 				main_player->set_last_collided_boundary(i);
 			}
 		}
@@ -76,13 +77,13 @@ static void key(unsigned char key, int x, int y)
 			main_player->accelerate();
 			break;
 		case 'a':
-			main_player->rotate('l');
+			main_player->rotate('l', 'n');
 			break;
 		case 's':
-			main_player->bounce();
+			// main_player->bounce();
 			break;
 		case 'd':
-			main_player->rotate('r');
+			main_player->rotate('r', 'n');
 			break;
     }
     glutPostRedisplay();
@@ -170,8 +171,7 @@ int main(int argc, char** argv)
 	// Polygon player_sprite_right_wing (player_sprite_right_wing_points, {10, 10});
 	// player_sprite_right_wing.set_colour({0.8, 0.2, 0.1});
 	vector<point> player_sprite_boosters_points = {
-		{-6, 0}, 		{-2, 0},		{2, 0},			{6, 0},
-				{-4, -4},						{4, -4}
+		{-6, 0}, {-4, -4}, {-2, 0}, {-2, 0}, {0, -6}, {2, 0}, {2, 0}, {4, -4}, {6, 0},
 	};
 	Polygon player_sprite_boosters(player_sprite_boosters_points, {10, 10});
 	player_sprite_boosters.set_colour({0.8, 0.2, 0.1});

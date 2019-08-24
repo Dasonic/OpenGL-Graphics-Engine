@@ -20,8 +20,8 @@
 			void draw();
 			void accelerate();
 			void decelerate();
-			void rotate(char direction);
-			void bounce();
+			void rotate(char direction, int boundary);
+			void bounce(char boundary);
 			void destroy();
 			rectangle get_collision_box();
 			bool check_collision(rectangle other_entity);

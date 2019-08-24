@@ -28,7 +28,7 @@ void Entity::draw() {
 }
 
 void Entity::accelerate() {
-
+	// cout << direction_facing << endl;
 	if (movement_speed + acceleration_value <= max_speed)
 		movement_speed += acceleration_value;
 
@@ -41,7 +41,7 @@ void Entity::decelerate() {
 	return;
 }
 
-void Entity::rotate(char direction) {
+void Entity::rotate(char direction, int boundary) {
 	// If rotating left, subtract from direction
 	if (direction == 'l')
 		direction_facing += rotation_speed;
@@ -52,32 +52,49 @@ void Entity::rotate(char direction) {
 	else if (direction == 'b')
 		if (direction_facing == 0 || direction_facing == 90 || direction_facing == 180 || direction_facing == 270)
 			direction_facing += 180;
+		else if (boundary == 0 && direction_facing == 315)
+			direction_facing -= 90;
+		else if (boundary == 1 && direction_facing == 135)
+			direction_facing -= 90;
+		else if (boundary == 2 && direction_facing == 45)
+			direction_facing -= 90;
+		else if (boundary == 3 && direction_facing == 225)
+			direction_facing -= 90;
 		else
 			direction_facing += 90;
-		
-	
 	// Make sure direction lays between 0 and 360
 	if (direction_facing >= 360)
 		direction_facing -= 360;
 	else if (direction_facing < 0)
 		direction_facing += 360;
+
+	
 	for (int i = 0; i < sprite.size(); i++) {
 		if (direction == 'l')
 			sprite[i].rotate(rotation_speed);
 		else if (direction == 'r')
 			sprite[i].rotate(-rotation_speed);
-		else if (direction == 'b')
+		else if (direction == 'b') {
 			if (direction_facing == 0 || direction_facing == 90 || direction_facing == 180 || direction_facing == 270)
 				sprite[i].rotate(180);
+			else if (boundary == 0 && direction_facing == 225)
+				sprite[i].rotate(-90);
+			else if (boundary == 1 && direction_facing == 45)
+				sprite[i].rotate(-90);
+			else if (boundary == 2 && direction_facing == 315)
+				sprite[i].rotate(-90);
+			else if (boundary == 3 && direction_facing == 135)
+				sprite[i].rotate(-90);
 			else
 				sprite[i].rotate(90);
+		}
 	}
 
 	return;
 }
 
-void Entity::bounce() {
-	rotate('b');
+void Entity::bounce(char boundary) {
+	rotate('b', boundary);
 	accelerate();
 	return;
 }
@@ -135,5 +152,5 @@ int Entity::get_last_collided_boundary() {
 }
 
 long Entity::get_time_since_boundary_collision(chrono::_V2::system_clock::time_point current_time) {
-	return chrono::duration_cast<chrono::nanoseconds>(last_collission_time-current_time).count();
+	return chrono::duration_cast<chrono::nanoseconds>(current_time-last_collission_time).count();
 }
