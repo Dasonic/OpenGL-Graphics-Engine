@@ -337,26 +337,10 @@ bool intersects(point p1, point p2, point p3, point p4) {
     \param RGB: struct with 3 doubles between 0 and 0.256
  */
 void drawPolygon(vector<point> points, colour RGB) {
-    // vector<int> used = {}; // stores index of used points
 	vector<vector<point>> drawn_lines;
 	for (int index = 1; index < points.size(); index++) {
-    // while (used.size() < points.size()) {
-        // Find leftmost vertex
         point vertex_a = points[index];
         int vertex_a_index = index;
-        // for (int i = 0; i < points.size(); i++) {
-        //     if (find(used.begin(), used.end(), i) == used.end() && points[i].x < vertex_a.x) {
-        //         vertex_a = points[i];
-        //         vertex_a_index = i;
-        //     }
-        // }
-    
-        // if (vertex_a_index == -1) {
-		// 	cerr << "ERROR: No points given to drawPolygon" << endl;
-		// 	exit(1);
-		// }
-
-        // used.push_back(vertex_a_index);
         // Form triangle with 2 adjacent vertices
         point vertex_b, vertex_c;
         if (vertex_a_index + 1 < points.size()) // Make sure the next index isn't out of bounds, if so, wrap around
@@ -374,7 +358,6 @@ void drawPolygon(vector<point> points, colour RGB) {
 				if (intersects(vertex_a, vertex_b, drawn_lines[i][0], drawn_lines[i][1]) || 
 					intersects(vertex_a, vertex_c, drawn_lines[i][0], drawn_lines[i][1]) ||
 					intersects(vertex_b, vertex_c, drawn_lines[i][0], drawn_lines[i][1])) {
-						// cout << "Intersects: " << intersects(vertex_a, vertex_b, drawn_lines[i][0], drawn_lines[i][1]) << endl;
 						lines_intersect = true;
 						break;
 					}

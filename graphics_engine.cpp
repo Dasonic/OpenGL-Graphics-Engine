@@ -14,7 +14,6 @@
 
 using namespace std;
 
-int out_of_bounds_counter = 0;
 int frame_counter = 0;
 Player* main_player;
 vector<Entity> asteroids;
@@ -33,10 +32,8 @@ void register_collisions() {
 	// First check boundary box
 	for (int i = 0; i < 4; i++) {
 		if (main_player->check_collision(boundary_box[i])) {
-			// cout << main_player->get_time_since_boundary_collision(check_collision_timer) << endl;
+			// If the boundary is different to the last one the player collided with or a set amount of time has passed (prevents detecting same collision more than once)
 			if (main_player->get_last_collided_boundary() != i || main_player->get_time_since_boundary_collision(check_collision_timer) > 300000000) {
-				out_of_bounds_counter++;
-				cout << "OUT OF BOUNDS " << out_of_bounds_counter << endl;
 				main_player->bounce(i);
 				main_player->set_last_collided_boundary(i);
 			}
@@ -97,45 +94,6 @@ static void idle(void)
 
 int main(int argc, char** argv)
 {
-	// Define the polygons to make up the player
-	/*
-	vector<point> player_sprite_cockpit_points = {
-			   {-1, 6}, {1, 6},
-		{-2, 4},			  {2, 4},
-		{-2, 2},			  {2, 2}
-	};
-	Polygon player_sprite_cockpit (player_sprite_cockpit_points);
-	vector<point> player_sprite_body_points = {
-			   {-2, 2},							 {2, 2},
-		{-3, 0},										  {3, 0},
-
-		{-3, -2}, {-2, -2},	      {0, -2},		 {2, -2}, {3, -2},
-					      {-1, -3}, 	  {1, -3},
-	};
-	Polygon player_sprite_body (player_sprite_body_points);
-	vector<point> player_sprite_left_wing_points = {
-			    {-5, 0},  		  {-3, 0},
-		{-6, -1},
-								  {-3, -2},
-						  {-4, -3},
-
-			    {-5, -5}, {-4, -5},
-		{-6, -6}
-	};
-	Polygon player_sprite_left_wing (player_sprite_left_wing_points);
-	vector<point> player_sprite_right_wing_points = {
-		{3, 0},		   {5, 0},
-						    	 {6, -1},
-		{3, 2},
-			   {4, -3},
-
-			   {4, -5}, {5, -5},
-			   					 {6, -6}
-	};
-	Polygon player_sprite_right_wing (player_sprite_right_wing_points);
-	
-	main_player = new Player({player_sprite_cockpit, player_sprite_body, player_sprite_left_wing, player_sprite_right_wing});
-	*/
 	vector<point> player_sprite_cockpit_points = {
 				{0, 6},
 		{-2, 2}, 	   {2, 2}
@@ -149,27 +107,6 @@ int main(int argc, char** argv)
 	};
 	Polygon player_sprite_body (player_sprite_body_points, {10, 10});
 
-	// vector<point> player_sprite_body_booster_points = {
-	// 	{-2, 0},	 	{2, 0},
-	// 			{0, -6}
-	// };
-	// Polygon player_sprite_body_booster (player_sprite_body_booster_points, {10, 10});
-	// player_sprite_body_booster.set_colour({0.8, 0.1, 0.4});
-
-
-	// vector<point> player_sprite_left_wing_points = {
-	// 	{-6, 0}, 		{-2, 0},
-	// 			{-4, -4}
-	// };
-	// Polygon player_sprite_left_wing (player_sprite_left_wing_points, {10, 10});
-	// player_sprite_left_wing.set_colour({0.8, 0.2, 0.1});
-
-	// vector<point> player_sprite_right_wing_points = {
-	// 	{2, 0}, 		{6, 0},
-	// 			{4, -4}
-	// };
-	// Polygon player_sprite_right_wing (player_sprite_right_wing_points, {10, 10});
-	// player_sprite_right_wing.set_colour({0.8, 0.2, 0.1});
 	vector<point> player_sprite_boosters_points = {
 		{-6, 0}, {-4, -4}, {-2, 0}, {-2, 0}, {0, -6}, {2, 0}, {2, 0}, {4, -4}, {6, 0},
 	};
@@ -177,12 +114,6 @@ int main(int argc, char** argv)
 	player_sprite_boosters.set_colour({0.8, 0.2, 0.1});
 
 	main_player = new Player({player_sprite_cockpit, player_sprite_body, player_sprite_boosters});
-	// vector<point> triangle_points = { {0, 3}, {-3, -3}, { 3, -3} };
-	// vector<point> square_points = {{-3, -3}, {3, -3}, {-3, -5}, {3, -5}};
-
-	// Polygon triangle (triangle_points);
-	// Polygon square (square_points);
-	// main_player = new Player({triangle, square});
 
 	
     glutInit(&argc, argv);

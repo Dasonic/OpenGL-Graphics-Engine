@@ -52,6 +52,7 @@ void Entity::rotate(char direction, int boundary) {
 	else if (direction == 'b')
 		if (direction_facing == 0 || direction_facing == 90 || direction_facing == 180 || direction_facing == 270)
 			direction_facing += 180;
+		// Special cases where the ship needs to flip the other way
 		else if (boundary == 0 && direction_facing == 315)
 			direction_facing -= 90;
 		else if (boundary == 1 && direction_facing == 135)
@@ -74,9 +75,11 @@ void Entity::rotate(char direction, int boundary) {
 			sprite[i].rotate(rotation_speed);
 		else if (direction == 'r')
 			sprite[i].rotate(-rotation_speed);
+		// If bouncing back, flip direction
 		else if (direction == 'b') {
 			if (direction_facing == 0 || direction_facing == 90 || direction_facing == 180 || direction_facing == 270)
 				sprite[i].rotate(180);
+			// Special cases where the ship needs to flip the other way
 			else if (boundary == 0 && direction_facing == 225)
 				sprite[i].rotate(-90);
 			else if (boundary == 1 && direction_facing == 45)
@@ -108,12 +111,6 @@ rectangle Entity::get_collision_box() {
 }
 
 bool Entity::check_collision(rectangle other_entity) {
-	// std::cout << other_entity.top_left.y << std::endl;
-	// if (collision_box.top_left.x >= other_entity.bottom_right.x ||
-	// 	collision_box.bottom_right.x <= other_entity.top_left.x ||
-	// 	collision_box.top_left.y >= other_entity.bottom_right.y ||
-	// 	collision_box.bottom_right.y <= other_entity.top_left.y)
-	// 	return false;
 	if (collision_box.top_left.x > other_entity.bottom_right.x ||
 		other_entity.top_left.x > collision_box.bottom_right.x)
 		return false;

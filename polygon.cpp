@@ -35,7 +35,6 @@ void Polygon::draw() {
 	matrix ts(4, 4);
 	last_used_point_list.clear();
 	
-	// cout << "---------------" << endl;
 	for (int i = 0; i < point_list.size(); i++) {
 		// Convert point to matrix
 		matrix temp_point(4, 1);
@@ -43,8 +42,6 @@ void Polygon::draw() {
 		// Apply transformation to co-ords
 		matrix use_point(4, 1);
 		use_point = transformation_matrix_list.back().multiply(temp_point);
-		// cout << "--" << endl;
-		// use_point.print();
 		// Add transformed points to vector
 		last_used_point_list.push_back({(int)use_point.get_val(0, 0), (int)use_point.get_val(1, 0)});
 	}
