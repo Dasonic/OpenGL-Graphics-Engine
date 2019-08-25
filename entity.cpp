@@ -63,6 +63,8 @@ void Entity::rotate(char direction, int boundary) {
 			direction_facing -= 90;
 		else
 			direction_facing += 90;
+	else if (direction == 'a')
+		direction_facing += 180;
 	// Make sure direction lays between 0 and 360
 	if (direction_facing >= 360)
 		direction_facing -= 360;
@@ -91,6 +93,8 @@ void Entity::rotate(char direction, int boundary) {
 			else
 				sprite[i].rotate(90);
 		}
+		else if (direction == 'a')
+			sprite[i].rotate(180);
 	}
 
 	return;
@@ -142,6 +146,7 @@ void Entity::refresh_collision_box() {
 void Entity::set_last_collided_boundary(int boundary) {
 	last_collission_boundary = boundary;
 	last_collission_time = chrono::high_resolution_clock::now();
+	return;
 }
 
 int Entity::get_last_collided_boundary() {

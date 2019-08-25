@@ -16,6 +16,8 @@
 
 using namespace std;
 
+#define MIN_TIME_SINCE_COLLISION 300000000
+
 int frame_counter = 0;
 Player* main_player;
 list<Asteroid> asteroids = {};
@@ -34,18 +36,18 @@ void register_collisions() {
 	chrono::_V2::system_clock::time_point check_collision_timer = std::chrono::high_resolution_clock::now();
 	// First check boundary box
 	for (int i = 0; i < 4; i++) {
-		if (main_player->check_collision(boundary_box[i])) {
-			// If the boundary is different to the last one the player collided with or a set amount of time has passed (prevents detecting same collision more than once)
-			if (main_player->get_last_collided_boundary() != i || main_player->get_time_since_boundary_collision(check_collision_timer) > 300000000) {
+		// If the boundary is different to the last one the player collided with or a set amount of time has passed (prevents detecting same collision more than once)
+		if (main_player->get_last_collided_boundary() != i || main_player->get_time_since_boundary_collision(check_collision_timer) > MIN_TIME_SINCE_COLLISION) {
+			if (main_player->check_collision(boundary_box[i])) {
 				main_player->bounce(i);
 				main_player->set_last_collided_boundary(i);
 			}
 		}
 		// Check asteroids
 		for (list<Asteroid>::iterator asteroid=asteroids.begin(); asteroid != asteroids.end(); ++asteroid) {
-			if (asteroid->check_collision(boundary_box[i])) {
-				// If the boundary is different to the last one the asteroid collided with or a set amount of time has passed (prevents detecting same collision more than once)
-				if (asteroid->get_last_collided_boundary() != i || asteroid->get_time_since_boundary_collision(check_collision_timer) > 300000000) {
+			// If the boundary is different to the last one the asteroid collided with or a set amount of time has passed (prevents detecting same collision more than once)
+			if (asteroid->get_last_collided_boundary() != i || asteroid->get_time_since_boundary_collision(check_collision_timer) > MIN_TIME_SINCE_COLLISION) {
+				if (asteroid->check_collision(boundary_box[i])) {
 					asteroid->bounce(i);
 					asteroid->set_last_collided_boundary(i);
 					break;
@@ -62,9 +64,13 @@ void register_collisions() {
 			score++;
 		}
 		for (list<Asteroid>::iterator other_asteroid=asteroids.begin(); other_asteroid != asteroids.end(); ++other_asteroid) {
-			if (asteroid != other_asteroid && asteroid->check_collision(other_asteroid->get_collision_box())) {
-				asteroid->randomise_direction();
-				other_asteroid->randomise_direction();
+			if (asteroid->get_asteroid_collided_id() != other_asteroid->get_asteroid_id() || (asteroid->get_asteroid_collided_id() == other_asteroid->get_asteroid_id() && asteroid->get_time_since_asteroid_collision(check_collision_timer)) > MIN_TIME_SINCE_COLLISION * 2) {
+				if (asteroid->check_collision(other_asteroid->get_collision_box())) {
+					asteroid->rotate('a', -1);
+					other_asteroid->rotate('a', -1);
+					asteroid->set_asteroid_collided_id(other_asteroid->get_asteroid_id());
+					other_asteroid->set_asteroid_collided_id(asteroid->get_asteroid_id());
+				}
 			}
 		}
 	}
