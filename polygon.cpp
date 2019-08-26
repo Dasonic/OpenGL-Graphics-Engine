@@ -27,6 +27,15 @@ Polygon::Polygon(std::vector<point> points)
 :	Polygon(points, {0, 0})
 {}
 
+Polygon::Polygon()
+:	Polygon({{0, 0}})
+{}
+
+void Polygon::change_points(std::vector<point> points) {
+	point_list = points;
+	last_used_point_list = points;
+}
+
 void Polygon::set_colour(colour RGB) {
 	fill_colour = RGB;
 }
@@ -107,4 +116,9 @@ point Polygon::find_bottom_right_point() {
 			bottom_right.y = last_used_point_list[i].y;
 	}
 	return bottom_right;
+}
+
+void Polygon::undo_transformation() {
+	transformation_matrix_list.pop_back();
+	return;
 }

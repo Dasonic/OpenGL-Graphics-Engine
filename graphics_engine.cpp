@@ -13,6 +13,7 @@
 #include "polygon.h"
 #include "player.h"
 #include "asteroid.h"
+#include "text.h"
 
 using namespace std;
 
@@ -23,6 +24,7 @@ Player* main_player;
 list<Asteroid> asteroids = {};
 const rectangle boundary_box[] = {{{0, 165}, {160, 159}}, {{0, 1}, {160, -5}}, {{-5, 160}, {1, 0}}, {{159, 160}, {165, 0}}};
 int score = 0;
+Text scoreboard("0", {5, 143}, {0.2, 0.3, 0.4});
 
 static void resize(int width, int height) {
     glClearColor(0.0, 0.0, 0.0, 0.0);         // black background
@@ -91,7 +93,7 @@ static void display(void)
 	// Generate new asteroid
 	if (rand()%10000 == 0) {
 		vector<point> asteroid_graphic = {{-3, 3}, {3, 3}, {3, -3}, {-3, -3}};
-		Polygon temp_asteroid (asteroid_graphic, {50, 50});
+		Polygon temp_asteroid (asteroid_graphic, {rand() % 130 + 25, rand() % 130 + 25});
 		Asteroid test_asteroid({temp_asteroid});
 		asteroids.push_back(test_asteroid);
 	}
@@ -103,6 +105,8 @@ static void display(void)
 	for (list<Asteroid>::iterator asteroid=asteroids.begin(); asteroid != asteroids.end(); ++asteroid) {
 		asteroid->draw();
 	}
+	scoreboard.update_text(to_string(score));
+	scoreboard.draw();
     glutSwapBuffers();
 }
 
