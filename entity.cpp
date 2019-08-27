@@ -19,7 +19,7 @@ void Entity::draw() {
 	// Move collission box
 	refresh_collision_box();
 	// std::cout << collision_box.top_left.x << ", " << collision_box.top_left.y << std::endl;
-	drawLineDDA(collision_box.top_left, collision_box.bottom_right, {0.3, 0.2, 0.1});
+	// drawLineDDA(collision_box.top_left, collision_box.bottom_right, {0.3, 0.2, 0.1});
 
 	for (int i = 0; i < sprite.size(); i ++) {
 		sprite[i].draw();

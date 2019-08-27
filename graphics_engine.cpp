@@ -7,6 +7,8 @@
 #include <chrono>
 #include <list>
 
+#include <irrKlang.h>
+
 #include "matrix.h"
 #include "structs.h"
 #include "draw_commands.h"
@@ -25,6 +27,8 @@ list<Asteroid> asteroids = {};
 const rectangle boundary_box[] = {{{0, 165}, {160, 159}}, {{0, 1}, {160, -5}}, {{-5, 160}, {1, 0}}, {{159, 160}, {165, 0}}};
 int score = 0;
 Text scoreboard("0", {5, 143}, {0.2, 0.3, 0.4});
+chrono::_V2::system_clock::time_point last_asteroid_spawn = chrono::high_resolution_clock::now();
+irrklang::ISoundEngine* engine = irrklang::createIrrKlangDevice();
 
 static void resize(int width, int height) {
     glClearColor(0.0, 0.0, 0.0, 0.0);         // black background
@@ -35,7 +39,7 @@ static void resize(int width, int height) {
 }
 
 void register_collisions() {
-	chrono::_V2::system_clock::time_point check_collision_timer = std::chrono::high_resolution_clock::now();
+	chrono::_V2::system_clock::time_point check_collision_timer = chrono::high_resolution_clock::now();
 	// First check boundary box
 	for (int i = 0; i < 4; i++) {
 		// If the boundary is different to the last one the player collided with or a set amount of time has passed (prevents detecting same collision more than once)
@@ -60,14 +64,16 @@ void register_collisions() {
 	// Check collision with asteroids
 	for (list<Asteroid>::iterator asteroid=asteroids.begin(); asteroid != asteroids.end(); ++asteroid) {
 		if (main_player->check_collision(asteroid->get_collision_box())) {
+			engine->play2D("media/point_get.wav", false);
 			// Destroy asteroid
 			asteroid->destroy();
 			asteroids.erase(asteroid++);
 			score++;
 		}
 		for (list<Asteroid>::iterator other_asteroid=asteroids.begin(); other_asteroid != asteroids.end(); ++other_asteroid) {
-			if (asteroid->get_asteroid_collided_id() != other_asteroid->get_asteroid_id() || (asteroid->get_asteroid_collided_id() == other_asteroid->get_asteroid_id() && asteroid->get_time_since_asteroid_collision(check_collision_timer)) > MIN_TIME_SINCE_COLLISION * 2) {
+			if (asteroid->get_asteroid_id() != other_asteroid->get_asteroid_id() && (asteroid->get_asteroid_collided_id() != other_asteroid->get_asteroid_id() || (asteroid->get_asteroid_collided_id() == other_asteroid->get_asteroid_id() && asteroid->get_time_since_asteroid_collision(check_collision_timer)) > MIN_TIME_SINCE_COLLISION * 2)) {
 				if (asteroid->check_collision(other_asteroid->get_collision_box())) {
+					engine->play2D("media/collision.wav", false);
 					asteroid->rotate('a', -1);
 					other_asteroid->rotate('a', -1);
 					asteroid->set_asteroid_collided_id(other_asteroid->get_asteroid_id());
@@ -91,7 +97,7 @@ static void display(void)
 	}
 
 	// Generate new asteroid
-	if (rand()%10000 == 0) {
+	if (rand()%10000 == 0 && chrono::duration_cast<std::chrono::seconds>(chrono::high_resolution_clock::now()-last_asteroid_spawn).count() > 1) {
 		vector<point> asteroid_graphic = {{-3, 3}, {3, 3}, {3, -3}, {-3, -3}};
 		Polygon temp_asteroid (asteroid_graphic, {rand() % 130 + 25, rand() % 130 + 25});
 		Asteroid test_asteroid({temp_asteroid});
@@ -166,6 +172,15 @@ int main(int argc, char** argv)
 	main_player = new Player({player_sprite_cockpit, player_sprite_body, player_sprite_boosters});
 
 	srand(time(NULL));
+
+
+	
+
+	if (!engine)
+	{
+		printf("Could not startup sound engine\n");
+		return 0; // error starting up the engine
+	}
 	
     glutInit(&argc, argv);
     glutInitWindowSize(800,800); // Size of the window (not including decorations, just usable space)
