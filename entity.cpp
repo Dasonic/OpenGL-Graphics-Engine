@@ -42,6 +42,7 @@ void Entity::decelerate() {
 }
 
 void Entity::rotate(char direction, int boundary) {
+	bool subtract_ninety = false;
 	// If rotating left, subtract from direction
 	if (direction == 'l')
 		direction_facing += ROTATION_SPEED;
@@ -49,20 +50,29 @@ void Entity::rotate(char direction, int boundary) {
 	else if (direction == 'r')
 		direction_facing -= ROTATION_SPEED;
 	// If bouncing back, flip direction
-	else if (direction == 'b')
+	else if (direction == 'b') {
 		if (direction_facing == 0 || direction_facing == 90 || direction_facing == 180 || direction_facing == 270)
 			direction_facing += 180;
 		// Special cases where the ship needs to flip the other way
-		else if (boundary == 0 && direction_facing == 315)
+		else if (boundary == 0 && direction_facing > 300) {
+			subtract_ninety = true;
 			direction_facing -= 90;
-		else if (boundary == 1 && direction_facing == 135)
+		}
+		else if (boundary == 1 && direction_facing < 240) {
+			subtract_ninety = true;
 			direction_facing -= 90;
-		else if (boundary == 2 && direction_facing == 45)
+		}
+		else if (boundary == 2 && direction_facing < 90) {
+			subtract_ninety = true;
 			direction_facing -= 90;
-		else if (boundary == 3 && direction_facing == 225)
+		}
+		else if (boundary == 3 && direction_facing < 270) {
+			subtract_ninety = true;
 			direction_facing -= 90;
+		}
 		else
 			direction_facing += 90;
+	}
 	else if (direction == 'a')
 		direction_facing += 180;
 	// Make sure direction lays between 0 and 360
@@ -70,8 +80,7 @@ void Entity::rotate(char direction, int boundary) {
 		direction_facing -= 360;
 	else if (direction_facing < 0)
 		direction_facing += 360;
-
-	
+	if (direction == 'b')
 	for (int i = 0; i < sprite.size(); i++) {
 		if (direction == 'l')
 			sprite[i].rotate(ROTATION_SPEED);
@@ -79,16 +88,11 @@ void Entity::rotate(char direction, int boundary) {
 			sprite[i].rotate(-ROTATION_SPEED);
 		// If bouncing back, flip direction
 		else if (direction == 'b') {
-			if (direction_facing == 0 || direction_facing == 90 || direction_facing == 180 || direction_facing == 270)
+			if (direction_facing == 0 || direction_facing == 90 || direction_facing == 180 || direction_facing == 270) {
 				sprite[i].rotate(180);
+			}
 			// Special cases where the ship needs to flip the other way
-			else if (boundary == 0 && direction_facing == 225)
-				sprite[i].rotate(-90);
-			else if (boundary == 1 && direction_facing == 45)
-				sprite[i].rotate(-90);
-			else if (boundary == 2 && direction_facing == 315)
-				sprite[i].rotate(-90);
-			else if (boundary == 3 && direction_facing == 135)
+			else if (subtract_ninety)
 				sprite[i].rotate(-90);
 			else
 				sprite[i].rotate(90);
