@@ -26,7 +26,7 @@ Player* main_player;
 list<Asteroid> asteroids = {};
 const rectangle boundary_box[] = {{{0, 165}, {160, 159}}, {{0, 1}, {160, -5}}, {{-5, 160}, {1, 0}}, {{159, 160}, {165, 0}}};
 int score = 0;
-Text scoreboard("0", {5, 143}, {0.2, 0.3, 0.4});
+Text scoreboard("0", {5, 143}, {1, 1, 0});
 chrono::_V2::system_clock::time_point last_asteroid_spawn = chrono::high_resolution_clock::now();
 irrklang::ISoundEngine* engine = irrklang::createIrrKlangDevice();
 
@@ -74,8 +74,8 @@ void register_collisions() {
 			if (asteroid->get_asteroid_id() != other_asteroid->get_asteroid_id() && (asteroid->get_asteroid_collided_id() != other_asteroid->get_asteroid_id() || (asteroid->get_asteroid_collided_id() == other_asteroid->get_asteroid_id() && asteroid->get_time_since_asteroid_collision(check_collision_timer)) > MIN_TIME_SINCE_COLLISION * 2)) {
 				if (asteroid->check_collision(other_asteroid->get_collision_box())) {
 					engine->play2D("media/collision.wav", false);
-					asteroid->rotate('a', -1);
-					other_asteroid->rotate('a', -1);
+					asteroid->collision_bounce();
+					other_asteroid->collision_bounce();
 					asteroid->set_asteroid_collided_id(other_asteroid->get_asteroid_id());
 					other_asteroid->set_asteroid_collided_id(asteroid->get_asteroid_id());
 				}
@@ -109,6 +109,7 @@ static void display(void)
 	main_player->draw();
 	// Draw the asteroids
 	for (list<Asteroid>::iterator asteroid=asteroids.begin(); asteroid != asteroids.end(); ++asteroid) {
+		asteroid->rotate('a');
 		asteroid->draw();
 	}
 	scoreboard.update_text(to_string(score));
@@ -130,13 +131,13 @@ static void key(unsigned char key, int x, int y)
 			main_player->accelerate();
 			break;
 		case 'a':
-			main_player->rotate('l', 'n');
+			main_player->rotate('l');
 			break;
 		case 's':
-			// main_player->bounce();
+			main_player->decelerate();
 			break;
 		case 'd':
-			main_player->rotate('r', 'n');
+			main_player->rotate('r');
 			break;
     }
     glutPostRedisplay();

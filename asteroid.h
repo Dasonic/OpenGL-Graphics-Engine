@@ -17,6 +17,7 @@
 			unsigned int get_asteroid_id();
 			unsigned int get_asteroid_collided_id();
 			long get_time_since_asteroid_collision(std::chrono::_V2::system_clock::time_point current_time);
+			void collision_bounce();
 	};
 
 #endif

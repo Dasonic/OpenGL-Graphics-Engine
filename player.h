@@ -5,8 +5,6 @@
 	#include "polygon.h"
 	#include "structs.h"
 	class Player: public Entity {
-		private:
-			int hp;
 		public:
 			Player(std::vector<Polygon> graphic);
 	};

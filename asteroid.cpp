@@ -2,14 +2,16 @@
 
 #include <ctime>
 #include <chrono>
+#include <cmath>
 // #include <limits>
 #include <stdlib.h>
+#include <iostream>
 
 Asteroid::Asteroid(std::vector<Polygon> graphic) {
 	sprite = graphic;
-	movement_speed = 0.025;
-	max_speed = 0.025;
-	min_speed = 0.020;
+	travel = {0, 0, 0};
+	max_speed = 0.05;
+	min_speed = 0.000;
 	drag = 1;
 	last_collission_boundary = -1;
 
@@ -22,10 +24,20 @@ Asteroid::Asteroid(std::vector<Polygon> graphic) {
 }
 
 void Asteroid::randomise_direction() {
-	int turn_times = rand() % 8; // Generate number between 0 and 7
-	for (int i = 0; i < turn_times; i ++) { // Rotate the asteroid turn_times times
-		rotate('r', 'n');
-	}
+	double travel_direction = rand() % 360; // Generate number between 0 and 360
+
+	// Break acceleration force into x and y values
+	double theta = travel_direction * (M_PI / 180);
+	double x = sin(theta) * max_speed;
+	double y = cos(theta) * max_speed;
+
+	// Calculate speed
+	travel.speed = sqrt(pow(x, 2) * pow(y, 2));
+	std::cout << travel.speed << std::endl;
+
+	travel.x = x;
+	travel.y = y;
+
 	return;
 }
 
@@ -45,4 +57,12 @@ unsigned int Asteroid::get_asteroid_collided_id() {
 
 long Asteroid::get_time_since_asteroid_collision(std::chrono::_V2::system_clock::time_point current_time) {
 	return std::chrono::duration_cast<std::chrono::nanoseconds>(current_time-asteroid_last_collission_time).count();
+}
+
+void Asteroid::collision_bounce() {
+	if (abs(travel.x) > abs(travel.y))
+		travel.x = -travel.x;
+	else
+		travel.y = -travel.y;
+	return;
 }

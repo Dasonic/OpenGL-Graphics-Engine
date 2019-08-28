@@ -11,4 +11,8 @@
 	struct rectangle {
 		point top_left, bottom_right;
 	};
+
+	struct velocity {
+		double x, y, speed;
+	};
 #endif

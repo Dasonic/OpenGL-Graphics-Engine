@@ -9,17 +9,14 @@ using namespace std;
 
 void Entity::draw() {
 
-	if (movement_speed - EPSILON > min_speed) {
+	if (travel.speed - EPSILON > min_speed) {
 		for (int i = 0; i < sprite.size(); i++) {
-			sprite[i].translate(0, movement_speed);
+			sprite[i].additive_translate(travel.x, travel.y);
 		}
-		movement_speed *= drag;
 	}
 
 	// Move collission box
 	refresh_collision_box();
-	// std::cout << collision_box.top_left.x << ", " << collision_box.top_left.y << std::endl;
-	// drawLineDDA(collision_box.top_left, collision_box.bottom_right, {0.3, 0.2, 0.1});
 
 	for (int i = 0; i < sprite.size(); i ++) {
 		sprite[i].draw();
@@ -28,85 +25,55 @@ void Entity::draw() {
 }
 
 void Entity::accelerate() {
-	// cout << direction_facing << endl;
-	if (movement_speed + acceleration_value <= max_speed)
-		movement_speed += acceleration_value;
+	// Break acceleration force into x and y values
+	double theta = direction_facing * (M_PI / 180);
+	double x = travel.x - sin(theta) * acceleration_value;
+	double y = travel.y + cos(theta) * acceleration_value;
+
+	// Calculate speed
+	double speed = sqrt(pow(x, 2) * pow(y, 2));
+
+	if (speed <= max_speed) {
+		travel.x = x;
+		travel.y = y;
+		travel.speed = speed;
+	}
 
 	return;
 }
 
 void Entity::decelerate() {
-	movement_speed = movement_speed * (drag - 0.2);
-
+	travel.x *= drag;
+	travel.y *= drag;
 	return;
 }
 
-void Entity::rotate(char direction, int boundary) {
-	bool subtract_ninety = false;
+void Entity::rotate(char direction) {
 	// If rotating left, subtract from direction
 	if (direction == 'l')
 		direction_facing += ROTATION_SPEED;
 	// If rotating right, add to direction
 	else if (direction == 'r')
 		direction_facing -= ROTATION_SPEED;
-	// If bouncing back, flip direction
-	else if (direction == 'b') {
-		if (direction_facing == 0 || direction_facing == 90 || direction_facing == 180 || direction_facing == 270)
-			direction_facing += 180;
-		// Special cases where the ship needs to flip the other way
-		else if (boundary == 0 && direction_facing > 300) {
-			subtract_ninety = true;
-			direction_facing -= 90;
-		}
-		else if (boundary == 1 && direction_facing < 240) {
-			subtract_ninety = true;
-			direction_facing -= 90;
-		}
-		else if (boundary == 2 && direction_facing < 90) {
-			subtract_ninety = true;
-			direction_facing -= 90;
-		}
-		else if (boundary == 3 && direction_facing < 270) {
-			subtract_ninety = true;
-			direction_facing -= 90;
-		}
-		else
-			direction_facing += 90;
-	}
-	else if (direction == 'a')
-		direction_facing += 180;
+	else if (direction == 'a') // Asteroid
+		direction_facing += 1;
 	// Make sure direction lays between 0 and 360
 	if (direction_facing >= 360)
 		direction_facing -= 360;
 	else if (direction_facing < 0)
 		direction_facing += 360;
-	if (direction == 'b')
 	for (int i = 0; i < sprite.size(); i++) {
-		if (direction == 'l')
-			sprite[i].rotate(ROTATION_SPEED);
-		else if (direction == 'r')
-			sprite[i].rotate(-ROTATION_SPEED);
-		// If bouncing back, flip direction
-		else if (direction == 'b') {
-			if (direction_facing == 0 || direction_facing == 90 || direction_facing == 180 || direction_facing == 270) {
-				sprite[i].rotate(180);
-			}
-			// Special cases where the ship needs to flip the other way
-			else if (subtract_ninety)
-				sprite[i].rotate(-90);
-			else
-				sprite[i].rotate(90);
-		}
-		else if (direction == 'a')
-			sprite[i].rotate(180);
+		sprite[i].rotate(direction_facing);
 	}
 
 	return;
 }
 
 void Entity::bounce(char boundary) {
-	rotate('b', boundary);
-	accelerate();
+	if (boundary == 0 && travel.y > 0 || boundary == 1 && travel.y < 0) // Top/Bottom Boundary
+			travel.y = -travel.y;
+	else if (boundary == 2 && travel.x < 0 || boundary == 3 && travel.x > 0) // Left/Right Boundary
+		travel.x = -travel.x;
 	return;
 }
 

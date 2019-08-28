@@ -8,6 +8,7 @@
 
 		public:
 			matrix(int num_rows, int num_cols);
+			matrix();
 			void set_row(int row_number, std::vector<double> row);
 			void set_col(int col_number, std::vector<double> col);
 			void set_val(int row_number, int col_number, double val);

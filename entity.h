@@ -11,7 +11,8 @@
 
 	class Entity {
 		protected:
-			double direction_facing, acceleration_value, movement_speed, max_speed, min_speed, drag = 0;
+			double direction_facing, acceleration_value, max_speed, min_speed, drag = 0;
+			velocity travel;
 			std::vector<Polygon> sprite;
 			rectangle collision_box;
 			point middle_point;
@@ -21,7 +22,7 @@
 			void draw();
 			void accelerate();
 			void decelerate();
-			void rotate(char direction, int boundary);
+			void rotate(char direction);
 			void bounce(char boundary);
 			void destroy();
 			rectangle get_collision_box();

@@ -13,6 +13,10 @@ matrix::matrix(int rows, int cols) {
 	return;
 }
 
+matrix::matrix()
+:	matrix(4, 4)
+{}
+
 void matrix::print() {
 	for(int row = 0; row < num_rows; row++) {
 		for (int col = 0; col < num_cols; col++) {
