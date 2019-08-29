@@ -16,7 +16,7 @@
 
 	void setPixel(point p, colour RGB);
 	void randomPixels();
-	void drawLineDDA(point p1, point p2, colour RGB, int* x_at_y);
+	void drawLineDDA(point p1, point p2, int* x_at_y);
 	void drawLineDDA(point p1, point p2, colour RGB);
 	void randomLines();
 	void fillTriangle(point p1, point p2, point p3, colour RGB);

@@ -9,10 +9,8 @@
 		std::vector<point> last_used_point_list;
 		matrix transform_matrix;
 		matrix rotate_matrix;
-		matrix current_matrix;
 		std::vector<matrix> transformation_matrix_list;
 		colour fill_colour;
-		void apply_transform();
 		public:
 			Polygon(std::vector<point> points, point coordinates);
 			Polygon(std::vector<point> points);

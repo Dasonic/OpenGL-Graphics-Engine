@@ -9,6 +9,11 @@
 
 using namespace std;
 
+/**
+ * Constructor for a polygon when give the points and a starting point
+ * \param points vector of points representing the points making up the polygon
+ * \param coordinates a point representing where the polygon should be drawn on the screen
+ */
 Polygon::Polygon(std::vector<point> points, point coordinates) {
 	point_list = points;
 	last_used_point_list = points;
@@ -20,41 +25,48 @@ Polygon::Polygon(std::vector<point> points, point coordinates) {
 	transformation_matrix.set_row(2, {0, 0, 1, 0});
 	transformation_matrix.set_row(3, {0, 0, 0, 1});
 
-	current_matrix = transformation_matrix;
 	rotate_matrix.set_up_transformation();
 	transform_matrix = transformation_matrix;
-
-	// current_matrices.push_back(transform_matrix); // Translate matrix
-	// current_matrices.push_back(transform_matrix);  // Rotate matrix
-	// current_matrices.push_back(transform_matrix);  // Scale matrix
 }
 
+/**
+ * Constructor for a polygon when give the points. Draws the polygon at 0, 0
+ * \param points vector of points representing the points making up the polygon
+ */
 Polygon::Polygon(std::vector<point> points)
 :	Polygon(points, {0, 0})
 {}
 
+/**
+ * Constructor for a blank Polygon. Defines one point at 0, 0 and draws it at 0, 0
+ */
 Polygon::Polygon()
 :	Polygon({{0, 0}})
 {}
 
+/**
+ * Replaces the vector the Polygon's points with the given vector
+ * \param points vector of points representing the points making up the polygon
+ */
 void Polygon::change_points(std::vector<point> points) {
 	point_list = points;
 	last_used_point_list = points;
 }
 
+/**
+ * Replaces the colour the Polygon is filled with with the given colour
+ * \param RGB struct representing the 3 double values for R, G and B
+ */
 void Polygon::set_colour(colour RGB) {
 	fill_colour = RGB;
 }
 
+/**
+ * Draws the Polygon on the screen
+ */
 void Polygon::draw() {
-	// apply_transform();
-	// current_matrix.print();
 	matrix ts(4, 4);
 	last_used_point_list.clear();
-	// Multiply translate, rotate and scale matrices
-	// matrix total_matrix(4, 4);
-	// total_matrix = current_matrices[2].multiply(current_matrices[1].multiply(current_matrices[0]));
-	// total_matrix.print();
 	
 	// Transform all points
 	for (int i = 0; i < point_list.size(); i++) {
@@ -63,28 +75,34 @@ void Polygon::draw() {
 		temp_point.set_col(0, {(double)point_list[i].x, (double)point_list[i].y, 1, 1});
 		// Apply transformation to co-ords
 		matrix use_point(4, 1);
-		// use_point = total_matrix.multiply(temp_point);
 		use_point = rotate_matrix.multiply(temp_point);
 		use_point.add_val(0, 0, transform_matrix.get_val(0, 3));
 		use_point.add_val(1, 0, transform_matrix.get_val(1, 3));
-		// use_point = transform_matrix.multiply(use_point);
 		// Add transformed points to vector
 		last_used_point_list.push_back({(int)use_point.get_val(0, 0), (int)use_point.get_val(1, 0)});
 	}
 	// Draw polygon using transformed points
 	drawPolygon(last_used_point_list, fill_colour);
 }
+
+/**
+ * Scales the Polygon by the given dimensions
+ * \param x_scale integer representing what to multiply the x scale of the Polygon by
+ * \param y_scale integer representing what to multiply the y scale of the Polygon by
+ */
 void Polygon::scale(int x_scale, int y_scale) {
 	matrix transform_matrix(4, 4);
 	transform_matrix.set_up_transformation();
 	transform_matrix.set_val(0, 0, x_scale);
 	transform_matrix.set_val(1, 1, y_scale);
-	// apply_transform(transform_matrix, 2);
 }
 
+/**
+ * Rotates the Polygon to the given angle
+ * \param angle double representing the angle in degrees
+ */
 void Polygon::rotate(double angle) {
 	matrix transformation_matrix(4, 4);
-	// transformation_matrix.set_up_transformation();
 	// Convert degrees to radians
 	double theta = angle * (M_PI / 180);
 	double cos_theta = cos(theta);
@@ -94,12 +112,13 @@ void Polygon::rotate(double angle) {
 	transformation_matrix.set_val(0, 1, -sin_theta);
 	transformation_matrix.set_val(1, 0, sin_theta);
 	transformation_matrix.set_val(1, 1, cos_theta);
-	// transformation_matrix.set_col(3, {40, 40, 1, 1});
-	// transformation_matrix.print();
-	// apply_transform(transformation_matrix, 1);
 	rotate_matrix = transformation_matrix;
 }
 
+/**
+ * Rotates the Polygon by the given angle (Adds to rotation)
+ * \param angle double representing the angle in degrees
+ */
 void Polygon::additive_rotate(double angle) {
 	matrix transformation_matrix(4, 4);
 	transformation_matrix.set_up_transformation();
@@ -109,7 +128,6 @@ void Polygon::additive_rotate(double angle) {
 	double sin_theta = sin(theta);
 
 	matrix * rotate_matrix_ptr = &rotate_matrix;
-	// rotate_matrix.print();
 
 	double tl = rotate_matrix_ptr->get_val(0, 0) + cos_theta;
 	double tr = rotate_matrix_ptr->get_val(0, 1) - sin_theta;
@@ -124,19 +142,27 @@ void Polygon::additive_rotate(double angle) {
 	transformation_matrix.set_col(3, {20, 20, 1, 1});
 
 	rotate_matrix = transformation_matrix;
-	// apply_transform(transform_matrix, 1);
 
 	return;
 }
 
+/**
+ * Translates the Polygon to the given dimensions
+ * \param x_scale integer representing where to move the x value of the Polygon to
+ * \param y_scale integer representing  where to move the y value of the Polygon to
+ */
 void Polygon::translate(double x_offset, double y_offset) {
 	matrix transformation_matrix(4, 4);
 	transformation_matrix.set_up_transformation();
 	transformation_matrix.set_col(3, {x_offset, y_offset, 1, 1});
 	transform_matrix = transformation_matrix;
-	// apply_transform(transform_matrix, 0);
 }
 
+/**
+ * Translates the Polygon by the given dimensions (Adds to translation)
+ * \param x_scale integer representing what to move the x value of the Polygon by
+ * \param y_scale integer representing  what to move the y value of the Polygon by
+ */
 void Polygon::additive_translate(double x_offset, double y_offset) {
 	// Get current x and y
 	matrix * translate_matrix_ptr = &transform_matrix;
@@ -148,28 +174,26 @@ void Polygon::additive_translate(double x_offset, double y_offset) {
 	return;
 }
 
-void Polygon::apply_transform() {
-	matrix temp(4, 4);
-	// rotate_matrix.print();
-	// cout << "+" << endl;
-	// transform_matrix.print();
-	// cout << "=" << endl;
-	temp = transform_matrix.multiply(rotate_matrix);
-	// temp = rotate_matrix.multiply(transform_matrix);
-	current_matrix = temp;
-	current_matrix.print();
-	// current_matrices[matrix_type] = transformation_matrix;
-	return;
-}
-
+/**
+ * Saves the currently used matrix to a stack
+ */
 void Polygon::save_transformation() {
-	// matrix temp = current_matrices[0].multiply(current_matrices[1].multiply(current_matrices[2]));
-	transformation_matrix_list.push_back(current_matrix);
-
+	transformation_matrix_list.push_back(rotate_matrix.multiply(transform_matrix));
 	return;
 }
 
-// Finds the smallest x value and the highest y value
+/**
+ * Reverts the transformation matrix to the last saved matrix
+ */
+void Polygon::undo_transformation() {
+	if (transformation_matrix_list.size() > 1)
+		transformation_matrix_list.pop_back();
+	return;
+}
+
+/**
+ * Finds the smallest x value and the highest y value
+ */
 point Polygon::find_top_left_point() {
 	point top_left = {999999, -999999}; 
 	for (int i = 0; i < last_used_point_list.size(); i ++) {
@@ -181,7 +205,9 @@ point Polygon::find_top_left_point() {
 	return top_left;
 }
 
-// Finds the highest x value and the lowest y value
+/**
+ * Finds the highest x value and the smallest y value
+ */
 point Polygon::find_bottom_right_point() {
 	point bottom_right = {-999999, 999999};
 	for (int i = 0; i < last_used_point_list.size(); i ++) {
@@ -191,10 +217,4 @@ point Polygon::find_bottom_right_point() {
 			bottom_right.y = last_used_point_list[i].y;
 	}
 	return bottom_right;
-}
-
-void Polygon::undo_transformation() {
-	if (transformation_matrix_list.size() > 1)
-		transformation_matrix_list.pop_back();
-	return;
 }

@@ -8,6 +8,12 @@
 
 using namespace std;
 
+/**
+ * Constructor for text. Currently only supports numbers
+ * \param text_to_display a string representing what text to display
+ * \param bottom_left_position a point representing the bottom left position to draw the text
+ * \param RGB a struct representing the RGB values of the colour to draw the text as
+ */
 Text::Text(std::string text_to_display, point bottom_left_position, colour RGB) {
 	display_text = text_to_display;
 	display_at = bottom_left_position;
@@ -30,10 +36,14 @@ Text::Text(std::string text_to_display, point bottom_left_position, colour RGB) 
 	seven = {tm, tmr, bmr };
 	eight = { tm, tml, tmr, mm, bml, bmr, bm };
 	nine = { tm, tml, tmr, mm, bmr };
-	// a = {tm, bm, mm, tml, tmr, bml, bmr};
 	return;
 }
 
+/**
+ * Draws the text to the screen
+ * \param character a vector rectangles that represent the lines of a character
+ * \param shift integer representing how many spaces to shift the drawing of the character over by
+ */
 void Text::draw_character(vector<rectangle> character, int shift) {
 	shift = shift * 9;
 	for (int i = 0; i < character.size(); i++) {
@@ -54,6 +64,9 @@ void Text::draw_character(vector<rectangle> character, int shift) {
 	return;
 }
 
+/**
+ * Draws the numbers to the screen
+ */
 void Text::draw() {
 	for (int i = 0; i < display_text.size(); i++) {
 		switch (display_text[i]) {
@@ -87,9 +100,6 @@ void Text::draw() {
 			case '9':
 				draw_character(nine, i);
 				break;
-			// case 'a':
-			// 	draw_character(a, i);
-			// 	break;
 			default:
 				cerr << "WARNING: Attempt to draw invalid character" << endl;
 		}
@@ -97,6 +107,10 @@ void Text::draw() {
 	return;
 }
 
+/**
+ * Replaces the text that will be replaced
+ * \param update_text string representing the new text to display
+ */
 void Text::update_text(std::string text_to_display) {
 	display_text = text_to_display;
 	return;

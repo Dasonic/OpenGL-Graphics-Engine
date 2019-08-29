@@ -1,0 +1,164 @@
+\hypertarget{classmatrix}{}\section{matrix Class Reference}
+\label{classmatrix}\index{matrix@{matrix}}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classmatrix_a2994d419451e97702e5b1cc12c81d914}{matrix}} (int num\+\_\+rows, int num\+\_\+cols)
+\item 
+\mbox{\hyperlink{classmatrix_a4daf70b1506ea976352f20e4322a9c17}{matrix}} ()
+\item 
+void \mbox{\hyperlink{classmatrix_a2e865089f895c8a84c37818cf75ca215}{set\+\_\+row}} (int row\+\_\+number, std\+::vector$<$ double $>$ row)
+\item 
+void \mbox{\hyperlink{classmatrix_a976c7dba1c9f40d6c129067fd4c5afc1}{set\+\_\+col}} (int col\+\_\+number, std\+::vector$<$ double $>$ col)
+\item 
+void \mbox{\hyperlink{classmatrix_a761067e4f67f5b9c23594cbc1d8ce696}{set\+\_\+val}} (int row\+\_\+number, int col\+\_\+number, double val)
+\item 
+void \mbox{\hyperlink{classmatrix_ae9817c7c1a8855874728c2342f514885}{add\+\_\+val}} (int row\+\_\+number, int col\+\_\+number, double val)
+\item 
+double \mbox{\hyperlink{classmatrix_a4913d355d918c769b200cc0b6bffbd68}{get\+\_\+val}} (int row\+\_\+number, int col\+\_\+number)
+\item 
+int \mbox{\hyperlink{classmatrix_a528d089b9734f7cda64ffab3a2d2831f}{get\+\_\+rows}} ()
+\item 
+int \mbox{\hyperlink{classmatrix_ae8479003bb1373c0f27f7f59980d5e3a}{get\+\_\+cols}} ()
+\item 
+void \mbox{\hyperlink{classmatrix_a820379d929b5a1c49c9df0d05f91c7e2}{print}} ()
+\item 
+\mbox{\hyperlink{classmatrix}{matrix}} \mbox{\hyperlink{classmatrix_a34563095940d2be0e50d98fbb2ba9ead}{multiply}} (\mbox{\hyperlink{classmatrix}{matrix}} other\+\_\+matrix)
+\item 
+void \mbox{\hyperlink{classmatrix_a159c12c74a7a58596e297a29094eb1f9}{set\+\_\+up\+\_\+transformation}} ()
+\end{DoxyCompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classmatrix_a2994d419451e97702e5b1cc12c81d914}\label{classmatrix_a2994d419451e97702e5b1cc12c81d914}} 
+\index{matrix@{matrix}!matrix@{matrix}}
+\index{matrix@{matrix}!matrix@{matrix}}
+\subsubsection{\texorpdfstring{matrix()}{matrix()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily matrix\+::matrix (\begin{DoxyParamCaption}\item[{int}]{rows,  }\item[{int}]{cols }\end{DoxyParamCaption})}
+
+Constructor for a matrix when given and number of rows and columns 
+\begin{DoxyParams}{Parameters}
+{\em rows} & an integer representing the number of rows the matrix should have \\
+\hline
+{\em cols} & an integer representing the number of columns the matrix should have \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classmatrix_a4daf70b1506ea976352f20e4322a9c17}\label{classmatrix_a4daf70b1506ea976352f20e4322a9c17}} 
+\index{matrix@{matrix}!matrix@{matrix}}
+\index{matrix@{matrix}!matrix@{matrix}}
+\subsubsection{\texorpdfstring{matrix()}{matrix()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily matrix\+::matrix (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Constructor for a matrix if not given a size. Makes a 4 by 4 matrix 
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classmatrix_ae9817c7c1a8855874728c2342f514885}\label{classmatrix_ae9817c7c1a8855874728c2342f514885}} 
+\index{matrix@{matrix}!add\+\_\+val@{add\+\_\+val}}
+\index{add\+\_\+val@{add\+\_\+val}!matrix@{matrix}}
+\subsubsection{\texorpdfstring{add\+\_\+val()}{add\_val()}}
+{\footnotesize\ttfamily void matrix\+::add\+\_\+val (\begin{DoxyParamCaption}\item[{int}]{row\+\_\+number,  }\item[{int}]{col\+\_\+number,  }\item[{double}]{val }\end{DoxyParamCaption})}
+
+Adds a value at the given row and column with the given value 
+\begin{DoxyParams}{Parameters}
+{\em row\+\_\+number} & integer representing which row to replace \\
+\hline
+{\em col\+\_\+number} & integer representing which column to replace \\
+\hline
+{\em val} & double representing the value to add in the matrix \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classmatrix_ae8479003bb1373c0f27f7f59980d5e3a}\label{classmatrix_ae8479003bb1373c0f27f7f59980d5e3a}} 
+\index{matrix@{matrix}!get\+\_\+cols@{get\+\_\+cols}}
+\index{get\+\_\+cols@{get\+\_\+cols}!matrix@{matrix}}
+\subsubsection{\texorpdfstring{get\+\_\+cols()}{get\_cols()}}
+{\footnotesize\ttfamily int matrix\+::get\+\_\+cols (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Returns the number of columns the matrix has \mbox{\Hypertarget{classmatrix_a528d089b9734f7cda64ffab3a2d2831f}\label{classmatrix_a528d089b9734f7cda64ffab3a2d2831f}} 
+\index{matrix@{matrix}!get\+\_\+rows@{get\+\_\+rows}}
+\index{get\+\_\+rows@{get\+\_\+rows}!matrix@{matrix}}
+\subsubsection{\texorpdfstring{get\+\_\+rows()}{get\_rows()}}
+{\footnotesize\ttfamily int matrix\+::get\+\_\+rows (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Returns the number of rows the matrix has \mbox{\Hypertarget{classmatrix_a4913d355d918c769b200cc0b6bffbd68}\label{classmatrix_a4913d355d918c769b200cc0b6bffbd68}} 
+\index{matrix@{matrix}!get\+\_\+val@{get\+\_\+val}}
+\index{get\+\_\+val@{get\+\_\+val}!matrix@{matrix}}
+\subsubsection{\texorpdfstring{get\+\_\+val()}{get\_val()}}
+{\footnotesize\ttfamily double matrix\+::get\+\_\+val (\begin{DoxyParamCaption}\item[{int}]{row\+\_\+number,  }\item[{int}]{col\+\_\+number }\end{DoxyParamCaption})}
+
+Returns a value at the given row and column 
+\begin{DoxyParams}{Parameters}
+{\em row\+\_\+number} & integer representing which row to replace \\
+\hline
+{\em col\+\_\+number} & integer representing which column to replace \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classmatrix_a34563095940d2be0e50d98fbb2ba9ead}\label{classmatrix_a34563095940d2be0e50d98fbb2ba9ead}} 
+\index{matrix@{matrix}!multiply@{multiply}}
+\index{multiply@{multiply}!matrix@{matrix}}
+\subsubsection{\texorpdfstring{multiply()}{multiply()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classmatrix}{matrix}} matrix\+::multiply (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classmatrix}{matrix}}}]{other\+\_\+matrix }\end{DoxyParamCaption})}
+
+Performs matrix dot multiplication between this matrix and a given matrix 
+\begin{DoxyParams}{Parameters}
+{\em other\+\_\+matrix} & the matrix to multiply with \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classmatrix_a820379d929b5a1c49c9df0d05f91c7e2}\label{classmatrix_a820379d929b5a1c49c9df0d05f91c7e2}} 
+\index{matrix@{matrix}!print@{print}}
+\index{print@{print}!matrix@{matrix}}
+\subsubsection{\texorpdfstring{print()}{print()}}
+{\footnotesize\ttfamily void matrix\+::print (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Prints out the matrix to stdout in a formatted way \mbox{\Hypertarget{classmatrix_a976c7dba1c9f40d6c129067fd4c5afc1}\label{classmatrix_a976c7dba1c9f40d6c129067fd4c5afc1}} 
+\index{matrix@{matrix}!set\+\_\+col@{set\+\_\+col}}
+\index{set\+\_\+col@{set\+\_\+col}!matrix@{matrix}}
+\subsubsection{\texorpdfstring{set\+\_\+col()}{set\_col()}}
+{\footnotesize\ttfamily void matrix\+::set\+\_\+col (\begin{DoxyParamCaption}\item[{int}]{col\+\_\+number,  }\item[{std\+::vector$<$ double $>$}]{col }\end{DoxyParamCaption})}
+
+Replaces a col in the matrix with the given vector 
+\begin{DoxyParams}{Parameters}
+{\em col\+\_\+number} & integer representing which column to replace \\
+\hline
+{\em col} & vector of doubles representing the new col values \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classmatrix_a2e865089f895c8a84c37818cf75ca215}\label{classmatrix_a2e865089f895c8a84c37818cf75ca215}} 
+\index{matrix@{matrix}!set\+\_\+row@{set\+\_\+row}}
+\index{set\+\_\+row@{set\+\_\+row}!matrix@{matrix}}
+\subsubsection{\texorpdfstring{set\+\_\+row()}{set\_row()}}
+{\footnotesize\ttfamily void matrix\+::set\+\_\+row (\begin{DoxyParamCaption}\item[{int}]{row\+\_\+number,  }\item[{std\+::vector$<$ double $>$}]{row }\end{DoxyParamCaption})}
+
+Replaces a row in the matrix with the given vector 
+\begin{DoxyParams}{Parameters}
+{\em row\+\_\+number} & integer representing which row to replace \\
+\hline
+{\em row} & vector of doubles representing the new row values \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classmatrix_a159c12c74a7a58596e297a29094eb1f9}\label{classmatrix_a159c12c74a7a58596e297a29094eb1f9}} 
+\index{matrix@{matrix}!set\+\_\+up\+\_\+transformation@{set\+\_\+up\+\_\+transformation}}
+\index{set\+\_\+up\+\_\+transformation@{set\+\_\+up\+\_\+transformation}!matrix@{matrix}}
+\subsubsection{\texorpdfstring{set\+\_\+up\+\_\+transformation()}{set\_up\_transformation()}}
+{\footnotesize\ttfamily void matrix\+::set\+\_\+up\+\_\+transformation (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Sets up the matrix as a blank transformation matrix \mbox{\Hypertarget{classmatrix_a761067e4f67f5b9c23594cbc1d8ce696}\label{classmatrix_a761067e4f67f5b9c23594cbc1d8ce696}} 
+\index{matrix@{matrix}!set\+\_\+val@{set\+\_\+val}}
+\index{set\+\_\+val@{set\+\_\+val}!matrix@{matrix}}
+\subsubsection{\texorpdfstring{set\+\_\+val()}{set\_val()}}
+{\footnotesize\ttfamily void matrix\+::set\+\_\+val (\begin{DoxyParamCaption}\item[{int}]{row\+\_\+number,  }\item[{int}]{col\+\_\+number,  }\item[{double}]{val }\end{DoxyParamCaption})}
+
+Replaces a value at the given row and column with the given value 
+\begin{DoxyParams}{Parameters}
+{\em row\+\_\+number} & integer representing which row to replace \\
+\hline
+{\em col\+\_\+number} & integer representing which column to replace \\
+\hline
+{\em val} & double representing the value to use in the matrix \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+matrix.\+h\item 
+matrix.\+cpp\end{DoxyCompactItemize}

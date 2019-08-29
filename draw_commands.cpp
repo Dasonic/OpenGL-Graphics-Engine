@@ -13,12 +13,12 @@
 
 using namespace std;
 
-/*
-    Takes in 1 co-ordinates and a colour value
-    Draws a line made of small boxs representing pixels to the screen
-    \param p: struct with 2 integers between 1 and 20 representing x and y
-    \param RGB: struct with 3 doubles between 0 and 0.256
- */
+/**
+ * Takes in 1 co-ordinates and a colour value
+ * Draws a line made of small boxs representing pixels to the screen
+ * \param p: struct with 2 integers between representing x and y
+ * \param RGB: struct with 3 doubles between 0 and 0.256
+*/
 void setPixel(point p, colour RGB) {
     glBegin(GL_QUADS);
         glColor3d(RGB.R, RGB.G, RGB.B); // Set colour
@@ -30,9 +30,9 @@ void setPixel(point p, colour RGB) {
     glEnd();
 }
 
-/*
-    Draws 100 pixels in random locations and random colours to the screen
- */
+/**
+ * Draws 100 pixels in random locations and random colours to the screen
+*/
 void randomPixels() {
     srand(time(NULL));
     for (int i = 0; i < 100; i++) {
@@ -43,13 +43,13 @@ void randomPixels() {
 
 }
 
-/*
-    Takes in 4 co-ordinates and 3 colour values.
-    Draws a line made of small boxs representing pixels to the screen
-    \param p1, p2: struct with 2 integers between 1 and 20 representing x and y
-    \param RGB: struct with 3 doubles between 0 and 0.256
- */
-void drawLineDDA(point p1, point p2, colour RGB, int* x_at_y) {
+/**
+ * Takes in 4 co-ordinates and 3 colour values.
+ * Sets a pointer to point to a line made of small boxs representing pixels. Does not draw to screen.
+ * \param p1, p2: struct with 2 integers between representing x and y
+ * \param x_at_y: pointer to an array of integers
+*/
+void drawLineDDA(point p1, point p2, int* x_at_y) {
     int dx = p2.x - p1.x;
     int dy = p2.y - p1.y;
     int steps;
@@ -80,6 +80,12 @@ void drawLineDDA(point p1, point p2, colour RGB, int* x_at_y) {
     return;
 }
 
+/**
+ * Takes in 4 co-ordinates and 3 colour values.
+ * Draws a line made of small boxs representing pixels to the screen
+ * \param p1, p2: struct with 2 integers between representing x and y
+ * \param RGB: struct with 3 doubles between 0 and 0.256
+*/
 void drawLineDDA(point p1, point p2, colour RGB) {
 	int dx = p2.x - p1.x;
     int dy = p2.y - p1.y;
@@ -109,8 +115,8 @@ void drawLineDDA(point p1, point p2, colour RGB) {
     return;
 }
 
-/*
-    Draws 10 random lines in random locations and random colours to the screen
+/**
+ * Draws 10 random lines in random locations and random colours to the screen
  */
 void randomLines() {
     srand(time(NULL));
@@ -128,11 +134,11 @@ void randomLines() {
     return;
 }
 
-/*
-    Takes in 3 co-ordinate points and 3 colour values.
-    Draws a triangle using small boxs representing a pixel to the screen and fills them with given colour
-    \param p1, p2, p3: structs with 2 integers between 1 and 20 representing x and y
-    \param RGB: struct with 3 doubles between 0 and 0.256
+/**
+ * Takes in 3 co-ordinate points and 3 colour values.
+ * Draws a triangle using small boxs representing a pixel to the screen and fills them with given colour
+ * \param p1, p2, p3: structs with 2 integers between representing x and y
+ * \param RGB: struct with 3 doubles between 0 and 0.256
  */
 void fillTriangle(point p1, point p2, point p3, colour RGB) {
 	colour white = {1, 1, 1};
@@ -209,10 +215,10 @@ void fillTriangle(point p1, point p2, point p3, colour RGB) {
     drawLineDDA(p3, p1, white);
 }
 
-/*
-    Takes in 4 co-ordinate points
-    Returns true if points a and b are on the same side
-    \param a, b, I1, I2: struct with 2 integers between 1 and 20 representing x and y
+/**
+ * Takes in 4 co-ordinate points
+ * Returns true if points a and b are on the same side
+ * \param a, b, I1, I2: struct with 2 integers between representing x and y
  */
 bool same_side(point a, point b, point I1, point I2) {
     // I1 and I2 are ends of the line
@@ -222,16 +228,21 @@ bool same_side(point a, point b, point I1, point I2) {
     return ((apt * bpt) > 0);
 }
 
-/*
-    Takes in 4 co-ordinate points
-    Returns true if a point p is inside a triangle formed out of points a, b and c
-    \param p, a, b, c: struct with 2 integers between 1 and 20 representing x and y
+/**
+ * Takes in 4 co-ordinate points
+ * Returns true if a point p is inside a triangle formed out of points a, b and c
+ * \param p, a, b, c: struct with 2 integers representing x and y
  */
 bool inside(point p, point a, point b, point c) {
 	return same_side(p, a, b, c) && same_side(p, b, a, c) && same_side(p, c, a, b);
     // return same_side(p, a, b, c) && same_side(p, b, c, a) && same_side(p, c, a, b);
 }
 
+/**
+ * Finds either the maximum x or y value given a list of points
+ * \param points: vector of points
+ * \param type: either 'x' or 'y' depending on which maximum is to be found
+ */
 int find_max_point(vector<point> points, char type) {
 	int max = -999999;
 	for (int i = 0; i < points.size(); i ++) {
@@ -249,6 +260,11 @@ int find_max_point(vector<point> points, char type) {
 	return max;
 }
 
+/**
+ * Finds either the minimum x or y value given a list of points
+ * \param points: vector of points
+ * \param type: either 'x' or 'y' depending on which minimum is to be found
+ */
 int find_min_point(vector<point> points, char type) {
 	int min = 99999999;
 	for (int i = 0; i < points.size(); i ++) {
@@ -266,11 +282,11 @@ int find_min_point(vector<point> points, char type) {
 	return min;
 }
 
-/*
-    Takes in an array of co-ordinate points and 3 co-ordinate points that form a triangle
-    Returns true if a point p is inside a triangle formed out of points a, b and c
-    \param points: vector of struct with 2 integers between 1 and 20 representing x and y
-    \param a, b, c: struct with 2 integers between 1 and 20 representing x and y
+/**
+ * Takes in an array of co-ordinate points and 3 co-ordinate points that form a triangle
+ * Returns true if a point p is inside a triangle formed out of points a, b and c
+ * \param points: vector of struct with 2 integers representing x and y
+ * \param a, b, c: struct with 2 integers representing x and y
  */
 bool check_inside_polygon(vector<point> points, point vertex_a, point vertex_b, point vertex_c) {
     // Find min and max points
@@ -283,14 +299,12 @@ bool check_inside_polygon(vector<point> points, point vertex_a, point vertex_b, 
 
     // Check if point inside rectangle
     for (int i = 0; i < points.size(); i++) {
-        // if (y != vertex_a.y && y != vertex_b.y && y != vertex_c.y) {
             int px = points[i].x;
 			int py = points[i].y;
             if (!(px < min_x && px > max_x && py < min_y && py > max_y)) {
                 // Point inside rectangle, now do inside triangle test
                 if (inside(points[i], vertex_a, vertex_b, vertex_c)) {
                     // Point is inside triangle
-					// cout << "Not drawing" << endl;
                     return true;
                 }
             }
@@ -299,9 +313,11 @@ bool check_inside_polygon(vector<point> points, point vertex_a, point vertex_b, 
     return false;
 }
 
+/**
+ * Returns true if a line between points p1 and p2 intersect a line between points p3 and p4
+ * \param p1, p2, p3, p4: struct with 2 integers representing x and y
+ */
 bool intersects(point p1, point p2, point p3, point p4) {
-	// Store the values for fast access and easy
-	// equations-to-code conversion
 	float x1 = p1.x, x2 = p2.x, x3 = p3.x, x4 = p4.x;
 	float y1 = p1.y, y2 = p2.y, y3 = p3.y, y4 = p4.y;
 	
@@ -330,11 +346,11 @@ bool intersects(point p1, point p2, point p3, point p4) {
 	return true;
 }
 
-/*
-    Takes in an array of co-ordinate points and 3 co-ordinate points that form a triangle
-    Returns true if a point p is inside a triangle formed out of points a, b and c
-    \param points: vector of struct with 2 integers between 1 and 20 representing x and y
-    \param RGB: struct with 3 doubles between 0 and 0.256
+/**
+ * Takes in an array of co-ordinate points and 3 co-ordinate points that form a triangle
+ * Returns true if a point p is inside a triangle formed out of points a, b and c
+ * \param points: vector of struct with 2 integers between representing x and y
+ * \param RGB: struct with 3 doubles between 0 and 0.256
  */
 void drawPolygon(vector<point> points, colour RGB) {
 	vector<vector<point>> drawn_lines;
@@ -363,7 +379,6 @@ void drawPolygon(vector<point> points, colour RGB) {
 					}
 			}
 			if (!lines_intersect) { // If the lines to draw this triangle don't intersect with any previously drawn
-				// colour randomColour = {RAND_COLOUR(), RAND_COLOUR(), RAND_COLOUR()};
 				fillTriangle(vertex_a, vertex_b, vertex_c, RGB);
 				drawn_lines.push_back({vertex_a, vertex_b});
 				drawn_lines.push_back({vertex_a, vertex_c});
