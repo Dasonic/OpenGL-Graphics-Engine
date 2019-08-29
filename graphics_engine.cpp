@@ -119,7 +119,7 @@ static void display(void)
 		// Generate new asteroid
 		last_asteroid_spawn = current_time;
 		vector<point> asteroid_graphic = {{-3, 3}, {3, 3}, {3, -3}, {-3, -3}};
-		Polygon temp_asteroid (asteroid_graphic, {(rand() % (MAX_X - 25)) + 25, (rand() % (MAX_Y - 25)) + 25});
+		Polygon temp_asteroid (asteroid_graphic, {(rand() % (MAX_X - 40)) + 40, (rand() % (MAX_Y - 40)) + 40});
 		Asteroid test_asteroid({temp_asteroid});
 		asteroids.push_back(test_asteroid);
 	}
