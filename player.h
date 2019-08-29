@@ -7,6 +7,7 @@
 	class Player: public Entity {
 		public:
 			Player(std::vector<Polygon> graphic);
+			double get_speed();
 	};
 
 #endif

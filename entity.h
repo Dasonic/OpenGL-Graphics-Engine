@@ -6,7 +6,7 @@
 	#include "structs.h"
 
 	#define ROUND(x) ((int)(x + 0.5))
-	#define EPSILON 0.0001
+	#define EPSILON 0.00001
 	#define ROTATION_SPEED 15
 
 	class Entity {

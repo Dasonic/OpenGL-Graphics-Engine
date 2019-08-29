@@ -10,7 +10,7 @@
 Asteroid::Asteroid(std::vector<Polygon> graphic) {
 	sprite = graphic;
 	travel = {0, 0, 0};
-	max_speed = 0.05;
+	max_speed = 0.025;
 	min_speed = 0.000;
 	drag = 1;
 	last_collission_boundary = -1;
@@ -32,12 +32,12 @@ void Asteroid::randomise_direction() {
 	double y = cos(theta) * max_speed;
 
 	// Calculate speed
-	travel.speed = sqrt(pow(x, 2) * pow(y, 2));
-	std::cout << travel.speed << std::endl;
-
+	travel.speed = sqrt(pow(x, 2) + pow(y, 2));
+	// std::cout << travel.speed << std::endl;
 	travel.x = x;
 	travel.y = y;
-
+	if (travel.speed < min_speed + EPSILON)
+		randomise_direction();
 	return;
 }
 

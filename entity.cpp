@@ -31,7 +31,7 @@ void Entity::accelerate() {
 	double y = travel.y + cos(theta) * acceleration_value;
 
 	// Calculate speed
-	double speed = sqrt(pow(x, 2) * pow(y, 2));
+	double speed = sqrt(pow(x, 2) + pow(y, 2));
 
 	if (speed <= max_speed) {
 		travel.x = x;
@@ -43,8 +43,15 @@ void Entity::accelerate() {
 }
 
 void Entity::decelerate() {
-	travel.x *= drag;
-	travel.y *= drag;
+	if (travel.speed - EPSILON > min_speed) {
+		travel.x *= drag;
+		travel.y *= drag;
+		travel.speed = sqrt(pow(travel.x, 2) + pow(travel.y, 2));
+	} else {
+		travel.x = 0;
+		travel.y = 0;
+		travel.speed = 0;
+	}
 	return;
 }
 
@@ -56,7 +63,7 @@ void Entity::rotate(char direction) {
 	else if (direction == 'r')
 		direction_facing -= ROTATION_SPEED;
 	else if (direction == 'a') // Asteroid
-		direction_facing += 1;
+		direction_facing += 0.1;
 	// Make sure direction lays between 0 and 360
 	if (direction_facing >= 360)
 		direction_facing -= 360;

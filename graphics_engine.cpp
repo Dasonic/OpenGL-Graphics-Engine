@@ -20,11 +20,13 @@
 using namespace std;
 
 #define MIN_TIME_SINCE_COLLISION 300000000
+#define MIN_TIME_ASTEROID_SPAWN 2
+#define MAX_TIME_ASTEROID_SPAWN 10
 
 int frame_counter = 0;
 Player* main_player;
 list<Asteroid> asteroids = {};
-const rectangle boundary_box[] = {{{0, 165}, {160, 159}}, {{0, 1}, {160, -5}}, {{-5, 160}, {1, 0}}, {{159, 160}, {165, 0}}};
+const rectangle boundary_box[] = {{{-10, 170}, {170, 160}}, {{-10, 0}, {170, -10}}, {{-10, 170}, {0, -10}}, {{160, 170}, {170, -10}}};
 int score = 0;
 Text scoreboard("0", {5, 143}, {1, 1, 0});
 chrono::_V2::system_clock::time_point last_asteroid_spawn = chrono::high_resolution_clock::now();
@@ -85,21 +87,39 @@ void register_collisions() {
 
 }
 
+long time_difference(chrono::_V2::system_clock::time_point time_a, chrono::_V2::system_clock::time_point time_b, char unit) {
+	long difference;
+	switch (unit) {
+		case 's': // Seconds
+			difference = chrono::duration_cast<std::chrono::seconds>(time_a-time_b).count();
+			break;
+		case 'm': // Milliseconds
+			difference = chrono::duration_cast<std::chrono::milliseconds>(time_a-time_b).count();
+			break;
+		case 'n': // Nanoseconds
+			difference = chrono::duration_cast<std::chrono::nanoseconds>(time_a-time_b).count();
+			break;
+		default:
+			cerr << "ERROR: Invalid unit passed to time_difference" << endl;
+			exit(5);
+	}
+	return abs(difference);
+}
 
 // What to display
 static void display(void)
 {
 	frame_counter++;
 	if (frame_counter == 100) {
-		// std::cout << std::chrono::duration_cast<std::chrono::nanoseconds>(end_timer-start_timer).count() << "ns" << std::endl;
 		register_collisions();
 		frame_counter = 0;
 	}
-
-	// Generate new asteroid
-	if (rand()%10000 == 0 && chrono::duration_cast<std::chrono::seconds>(chrono::high_resolution_clock::now()-last_asteroid_spawn).count() > 1) {
+	auto current_time = chrono::high_resolution_clock::now();
+	if (time_difference(current_time, last_asteroid_spawn, 's') > MIN_TIME_ASTEROID_SPAWN && rand()%500 == 0 || time_difference(current_time, last_asteroid_spawn, 's') > MAX_TIME_ASTEROID_SPAWN) {
+		// Generate new asteroid
+		last_asteroid_spawn = current_time;
 		vector<point> asteroid_graphic = {{-3, 3}, {3, 3}, {3, -3}, {-3, -3}};
-		Polygon temp_asteroid (asteroid_graphic, {rand() % 130 + 25, rand() % 130 + 25});
+		Polygon temp_asteroid (asteroid_graphic, {(rand() % (MAX_X - 25)) + 25, (rand() % (MAX_Y - 25)) + 25});
 		Asteroid test_asteroid({temp_asteroid});
 		asteroids.push_back(test_asteroid);
 	}
@@ -138,6 +158,9 @@ static void key(unsigned char key, int x, int y)
 			break;
 		case 'd':
 			main_player->rotate('r');
+			break;
+		case 'e':
+			cout << main_player->get_speed() << endl;
 			break;
     }
     glutPostRedisplay();
