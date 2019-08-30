@@ -193,7 +193,7 @@ void fillTriangle(point p1, point p2, point p3, colour RGB) {
 
             // Calculate gradient
 			int xy[higher.y - lower.y] = {0};
-            drawLineDDA(lower, higher, white, xy);
+            drawLineDDA(lower, higher, xy);
             int k = 0;
             for (int j = lower.y - bot.y; j < higher.y - bot.y; j++) { // Add x value to vector for values starting at the bottom to the top
                 x_at_y[j].push_back(xy[k]);
