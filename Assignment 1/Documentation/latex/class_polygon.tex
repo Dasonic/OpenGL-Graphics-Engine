@@ -1,0 +1,190 @@
+\hypertarget{class_polygon}{}\section{Polygon Class Reference}
+\label{class_polygon}\index{Polygon@{Polygon}}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_polygon_a7c9801ab8183848cda1a9e4e355973cc}{Polygon}} (std\+::vector$<$ \mbox{\hyperlink{structpoint}{point}} $>$ points, \mbox{\hyperlink{structpoint}{point}} coordinates)
+\item 
+\mbox{\hyperlink{class_polygon_a84c5ba9b7d4fbbfd85e2485712d282d8}{Polygon}} (std\+::vector$<$ \mbox{\hyperlink{structpoint}{point}} $>$ points)
+\item 
+\mbox{\hyperlink{class_polygon_ac183e712f8be1e13f1c9d5b4d4512ead}{Polygon}} ()
+\item 
+void \mbox{\hyperlink{class_polygon_ab5a643b45071142291a93070f36e9159}{change\+\_\+points}} (std\+::vector$<$ \mbox{\hyperlink{structpoint}{point}} $>$ points)
+\item 
+void \mbox{\hyperlink{class_polygon_a5895893a117ad4fba5422e9269ff729c}{set\+\_\+colour}} (\mbox{\hyperlink{structcolour}{colour}} R\+GB)
+\item 
+void \mbox{\hyperlink{class_polygon_a17428a7d7dff4653c905b91020a9f803}{draw}} ()
+\item 
+void \mbox{\hyperlink{class_polygon_a3166ec344b0453bde49f6c32300eab12}{scale}} (int x\+\_\+scale, int y\+\_\+scale)
+\item 
+void \mbox{\hyperlink{class_polygon_ae5993bb89530d873701d9d5558494c09}{rotate}} (double angle)
+\item 
+void \mbox{\hyperlink{class_polygon_aa058b0c05dcb8a9c4c0f2737ac59fb64}{additive\+\_\+rotate}} (double angle)
+\item 
+void \mbox{\hyperlink{class_polygon_a8981ae2ebe960a7355134f03dc88f1e3}{translate}} (double x\+\_\+offset, double y\+\_\+offset)
+\item 
+void \mbox{\hyperlink{class_polygon_aa066ce6c55fe73f2187919085016e9ec}{additive\+\_\+translate}} (double x\+\_\+offset, double y\+\_\+offset)
+\item 
+void \mbox{\hyperlink{class_polygon_aca723d97ae607e5079cd5dfd7ba616d3}{save\+\_\+transformation}} ()
+\item 
+void \mbox{\hyperlink{class_polygon_a9c058c0a82c8d8138301d2c6ec049d09}{undo\+\_\+transformation}} ()
+\item 
+\mbox{\hyperlink{structpoint}{point}} \mbox{\hyperlink{class_polygon_a1c99b0b80833ef2eca19b98530d90910}{find\+\_\+top\+\_\+left\+\_\+point}} ()
+\item 
+\mbox{\hyperlink{structpoint}{point}} \mbox{\hyperlink{class_polygon_a1f9b4d001197e6ff84fb4ed50b47be59}{find\+\_\+bottom\+\_\+right\+\_\+point}} ()
+\end{DoxyCompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_polygon_a7c9801ab8183848cda1a9e4e355973cc}\label{class_polygon_a7c9801ab8183848cda1a9e4e355973cc}} 
+\index{Polygon@{Polygon}!Polygon@{Polygon}}
+\index{Polygon@{Polygon}!Polygon@{Polygon}}
+\subsubsection{\texorpdfstring{Polygon()}{Polygon()}\hspace{0.1cm}{\footnotesize\ttfamily [1/3]}}
+{\footnotesize\ttfamily Polygon\+::\+Polygon (\begin{DoxyParamCaption}\item[{std\+::vector$<$ \mbox{\hyperlink{structpoint}{point}} $>$}]{points,  }\item[{\mbox{\hyperlink{structpoint}{point}}}]{coordinates }\end{DoxyParamCaption})}
+
+Constructor for a polygon when give the points and a starting point 
+\begin{DoxyParams}{Parameters}
+{\em points} & vector of points representing the points making up the polygon \\
+\hline
+{\em coordinates} & a point representing where the polygon should be drawn on the screen \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_polygon_a84c5ba9b7d4fbbfd85e2485712d282d8}\label{class_polygon_a84c5ba9b7d4fbbfd85e2485712d282d8}} 
+\index{Polygon@{Polygon}!Polygon@{Polygon}}
+\index{Polygon@{Polygon}!Polygon@{Polygon}}
+\subsubsection{\texorpdfstring{Polygon()}{Polygon()}\hspace{0.1cm}{\footnotesize\ttfamily [2/3]}}
+{\footnotesize\ttfamily Polygon\+::\+Polygon (\begin{DoxyParamCaption}\item[{std\+::vector$<$ \mbox{\hyperlink{structpoint}{point}} $>$}]{points }\end{DoxyParamCaption})}
+
+Constructor for a polygon when give the points. Draws the polygon at 0, 0 
+\begin{DoxyParams}{Parameters}
+{\em points} & vector of points representing the points making up the polygon \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_polygon_ac183e712f8be1e13f1c9d5b4d4512ead}\label{class_polygon_ac183e712f8be1e13f1c9d5b4d4512ead}} 
+\index{Polygon@{Polygon}!Polygon@{Polygon}}
+\index{Polygon@{Polygon}!Polygon@{Polygon}}
+\subsubsection{\texorpdfstring{Polygon()}{Polygon()}\hspace{0.1cm}{\footnotesize\ttfamily [3/3]}}
+{\footnotesize\ttfamily Polygon\+::\+Polygon (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Constructor for a blank \mbox{\hyperlink{class_polygon}{Polygon}}. Defines one point at 0, 0 and draws it at 0, 0 
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{class_polygon_aa058b0c05dcb8a9c4c0f2737ac59fb64}\label{class_polygon_aa058b0c05dcb8a9c4c0f2737ac59fb64}} 
+\index{Polygon@{Polygon}!additive\+\_\+rotate@{additive\+\_\+rotate}}
+\index{additive\+\_\+rotate@{additive\+\_\+rotate}!Polygon@{Polygon}}
+\subsubsection{\texorpdfstring{additive\+\_\+rotate()}{additive\_rotate()}}
+{\footnotesize\ttfamily void Polygon\+::additive\+\_\+rotate (\begin{DoxyParamCaption}\item[{double}]{angle }\end{DoxyParamCaption})}
+
+Rotates the \mbox{\hyperlink{class_polygon}{Polygon}} by the given angle (Adds to rotation) 
+\begin{DoxyParams}{Parameters}
+{\em angle} & double representing the angle in degrees \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_polygon_aa066ce6c55fe73f2187919085016e9ec}\label{class_polygon_aa066ce6c55fe73f2187919085016e9ec}} 
+\index{Polygon@{Polygon}!additive\+\_\+translate@{additive\+\_\+translate}}
+\index{additive\+\_\+translate@{additive\+\_\+translate}!Polygon@{Polygon}}
+\subsubsection{\texorpdfstring{additive\+\_\+translate()}{additive\_translate()}}
+{\footnotesize\ttfamily void Polygon\+::additive\+\_\+translate (\begin{DoxyParamCaption}\item[{double}]{x\+\_\+offset,  }\item[{double}]{y\+\_\+offset }\end{DoxyParamCaption})}
+
+Translates the \mbox{\hyperlink{class_polygon}{Polygon}} by the given dimensions (Adds to translation) 
+\begin{DoxyParams}{Parameters}
+{\em x\+\_\+scale} & integer representing what to move the x value of the \mbox{\hyperlink{class_polygon}{Polygon}} by \\
+\hline
+{\em y\+\_\+scale} & integer representing what to move the y value of the \mbox{\hyperlink{class_polygon}{Polygon}} by \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_polygon_ab5a643b45071142291a93070f36e9159}\label{class_polygon_ab5a643b45071142291a93070f36e9159}} 
+\index{Polygon@{Polygon}!change\+\_\+points@{change\+\_\+points}}
+\index{change\+\_\+points@{change\+\_\+points}!Polygon@{Polygon}}
+\subsubsection{\texorpdfstring{change\+\_\+points()}{change\_points()}}
+{\footnotesize\ttfamily void Polygon\+::change\+\_\+points (\begin{DoxyParamCaption}\item[{std\+::vector$<$ \mbox{\hyperlink{structpoint}{point}} $>$}]{points }\end{DoxyParamCaption})}
+
+Replaces the vector the \mbox{\hyperlink{class_polygon}{Polygon}}\textquotesingle{}s points with the given vector 
+\begin{DoxyParams}{Parameters}
+{\em points} & vector of points representing the points making up the polygon \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_polygon_a17428a7d7dff4653c905b91020a9f803}\label{class_polygon_a17428a7d7dff4653c905b91020a9f803}} 
+\index{Polygon@{Polygon}!draw@{draw}}
+\index{draw@{draw}!Polygon@{Polygon}}
+\subsubsection{\texorpdfstring{draw()}{draw()}}
+{\footnotesize\ttfamily void Polygon\+::draw (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Draws the \mbox{\hyperlink{class_polygon}{Polygon}} on the screen \mbox{\Hypertarget{class_polygon_a1f9b4d001197e6ff84fb4ed50b47be59}\label{class_polygon_a1f9b4d001197e6ff84fb4ed50b47be59}} 
+\index{Polygon@{Polygon}!find\+\_\+bottom\+\_\+right\+\_\+point@{find\+\_\+bottom\+\_\+right\+\_\+point}}
+\index{find\+\_\+bottom\+\_\+right\+\_\+point@{find\+\_\+bottom\+\_\+right\+\_\+point}!Polygon@{Polygon}}
+\subsubsection{\texorpdfstring{find\+\_\+bottom\+\_\+right\+\_\+point()}{find\_bottom\_right\_point()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structpoint}{point}} Polygon\+::find\+\_\+bottom\+\_\+right\+\_\+point (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Finds the highest x value and the smallest y value \mbox{\Hypertarget{class_polygon_a1c99b0b80833ef2eca19b98530d90910}\label{class_polygon_a1c99b0b80833ef2eca19b98530d90910}} 
+\index{Polygon@{Polygon}!find\+\_\+top\+\_\+left\+\_\+point@{find\+\_\+top\+\_\+left\+\_\+point}}
+\index{find\+\_\+top\+\_\+left\+\_\+point@{find\+\_\+top\+\_\+left\+\_\+point}!Polygon@{Polygon}}
+\subsubsection{\texorpdfstring{find\+\_\+top\+\_\+left\+\_\+point()}{find\_top\_left\_point()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structpoint}{point}} Polygon\+::find\+\_\+top\+\_\+left\+\_\+point (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Finds the smallest x value and the highest y value \mbox{\Hypertarget{class_polygon_ae5993bb89530d873701d9d5558494c09}\label{class_polygon_ae5993bb89530d873701d9d5558494c09}} 
+\index{Polygon@{Polygon}!rotate@{rotate}}
+\index{rotate@{rotate}!Polygon@{Polygon}}
+\subsubsection{\texorpdfstring{rotate()}{rotate()}}
+{\footnotesize\ttfamily void Polygon\+::rotate (\begin{DoxyParamCaption}\item[{double}]{angle }\end{DoxyParamCaption})}
+
+Rotates the \mbox{\hyperlink{class_polygon}{Polygon}} to the given angle 
+\begin{DoxyParams}{Parameters}
+{\em angle} & double representing the angle in degrees \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_polygon_aca723d97ae607e5079cd5dfd7ba616d3}\label{class_polygon_aca723d97ae607e5079cd5dfd7ba616d3}} 
+\index{Polygon@{Polygon}!save\+\_\+transformation@{save\+\_\+transformation}}
+\index{save\+\_\+transformation@{save\+\_\+transformation}!Polygon@{Polygon}}
+\subsubsection{\texorpdfstring{save\+\_\+transformation()}{save\_transformation()}}
+{\footnotesize\ttfamily void Polygon\+::save\+\_\+transformation (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Saves the currently used matrix to a stack \mbox{\Hypertarget{class_polygon_a3166ec344b0453bde49f6c32300eab12}\label{class_polygon_a3166ec344b0453bde49f6c32300eab12}} 
+\index{Polygon@{Polygon}!scale@{scale}}
+\index{scale@{scale}!Polygon@{Polygon}}
+\subsubsection{\texorpdfstring{scale()}{scale()}}
+{\footnotesize\ttfamily void Polygon\+::scale (\begin{DoxyParamCaption}\item[{int}]{x\+\_\+scale,  }\item[{int}]{y\+\_\+scale }\end{DoxyParamCaption})}
+
+Scales the \mbox{\hyperlink{class_polygon}{Polygon}} by the given dimensions 
+\begin{DoxyParams}{Parameters}
+{\em x\+\_\+scale} & integer representing what to multiply the x scale of the \mbox{\hyperlink{class_polygon}{Polygon}} by \\
+\hline
+{\em y\+\_\+scale} & integer representing what to multiply the y scale of the \mbox{\hyperlink{class_polygon}{Polygon}} by \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_polygon_a5895893a117ad4fba5422e9269ff729c}\label{class_polygon_a5895893a117ad4fba5422e9269ff729c}} 
+\index{Polygon@{Polygon}!set\+\_\+colour@{set\+\_\+colour}}
+\index{set\+\_\+colour@{set\+\_\+colour}!Polygon@{Polygon}}
+\subsubsection{\texorpdfstring{set\+\_\+colour()}{set\_colour()}}
+{\footnotesize\ttfamily void Polygon\+::set\+\_\+colour (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structcolour}{colour}}}]{R\+GB }\end{DoxyParamCaption})}
+
+Replaces the colour the \mbox{\hyperlink{class_polygon}{Polygon}} is filled with with the given colour 
+\begin{DoxyParams}{Parameters}
+{\em R\+GB} & struct representing the 3 double values for R, G and B \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_polygon_a8981ae2ebe960a7355134f03dc88f1e3}\label{class_polygon_a8981ae2ebe960a7355134f03dc88f1e3}} 
+\index{Polygon@{Polygon}!translate@{translate}}
+\index{translate@{translate}!Polygon@{Polygon}}
+\subsubsection{\texorpdfstring{translate()}{translate()}}
+{\footnotesize\ttfamily void Polygon\+::translate (\begin{DoxyParamCaption}\item[{double}]{x\+\_\+offset,  }\item[{double}]{y\+\_\+offset }\end{DoxyParamCaption})}
+
+Translates the \mbox{\hyperlink{class_polygon}{Polygon}} to the given dimensions 
+\begin{DoxyParams}{Parameters}
+{\em x\+\_\+scale} & integer representing where to move the x value of the \mbox{\hyperlink{class_polygon}{Polygon}} to \\
+\hline
+{\em y\+\_\+scale} & integer representing where to move the y value of the \mbox{\hyperlink{class_polygon}{Polygon}} to \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_polygon_a9c058c0a82c8d8138301d2c6ec049d09}\label{class_polygon_a9c058c0a82c8d8138301d2c6ec049d09}} 
+\index{Polygon@{Polygon}!undo\+\_\+transformation@{undo\+\_\+transformation}}
+\index{undo\+\_\+transformation@{undo\+\_\+transformation}!Polygon@{Polygon}}
+\subsubsection{\texorpdfstring{undo\+\_\+transformation()}{undo\_transformation()}}
+{\footnotesize\ttfamily void Polygon\+::undo\+\_\+transformation (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Reverts the transformation matrix to the last saved matrix 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+polygon.\+h\item 
+polygon.\+cpp\end{DoxyCompactItemize}

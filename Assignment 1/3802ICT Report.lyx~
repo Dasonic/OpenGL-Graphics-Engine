@@ -1,0 +1,162 @@
+#LyX 2.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 544
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\use_microtype false
+\use_dash_ligatures true
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\use_minted 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\is_math_indent 0
+\math_numbering_side default
+\quotes_style english
+\dynamic_quotes 0
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+3802ICT Assignment 1
+\end_layout
+
+\begin_layout Author
+Lachlan Roberts, s5088947
+\end_layout
+
+\begin_layout Description
+Created in C++ and OpenGL (with libraries FreeGlut and IrrKlang)
+\end_layout
+
+\begin_layout Part*
+Describes
+\end_layout
+
+\begin_layout Section*
+Game-play
+\end_layout
+
+\begin_layout Standard
+The objective of the game is to destroy asteroids as they spawn on the screen
+ by ramming your ship into the asteroid.
+ For every asteroid you destroy, points are added to your score.
+ The asteroids will fly around the screen, bouncing off the edges of the
+ screen and each other.
+ Try to get the highest score!
+\end_layout
+
+\begin_layout Section*
+Controls
+\end_layout
+
+\begin_layout Standard
+The player controls a small ship using the keyboard.
+ The 
+\begin_inset Quotes eld
+\end_inset
+
+w
+\begin_inset Quotes erd
+\end_inset
+
+ key accelerates the ship in the direction it is currently facing.
+ The 
+\begin_inset Quotes eld
+\end_inset
+
+a
+\begin_inset Quotes erd
+\end_inset
+
+ key rotates the ship to the left, and the 
+\begin_inset Quotes eld
+\end_inset
+
+d
+\begin_inset Quotes erd
+\end_inset
+
+ key rotates the ship to the right.
+ The ship will continue to travel based on momentum.
+ If you wish to slow down, the 
+\begin_inset Quotes eld
+\end_inset
+
+s
+\begin_inset Quotes erd
+\end_inset
+
+ key applies stabiliser thrusters that will slowly bring the ship to a stop.
+ The ship will bounce off the boundaries of the screen.
+\end_layout
+
+\begin_layout Section*
+Scoring
+\end_layout
+
+\begin_layout Standard
+The player is awarded points for colliding with asteroids.
+ The player is awarded a single point per asteroid collided with.
+\end_layout
+
+\end_body
+\end_document
