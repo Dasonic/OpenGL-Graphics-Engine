@@ -16,15 +16,6 @@ public class UML {
 		ArrayList<Element> all_classes = new ArrayList<Element>();
 		readFile(fileName, all_classes);
 		organise_data(all_classes, bottom_level);
-		// for (Element element : bottom_level) {
-		// 	System.out.println(element.get_name());
-		// 	for (Element subelement: element.get_children()) {
-		// 		System.out.println("-->" + subelement.get_name());
-		// 		for (Element subsubelement: subelement.get_children()) {
-		// 			System.out.println("---->" + subsubelement.get_name());
-		// 		}
-		// 	}
-		// }
 		set_up_GUI(fileName, bottom_level);
 	}
 	
@@ -97,7 +88,7 @@ public class UML {
 
 	private static void set_up_GUI(String filename, ArrayList<Element> all_classes) {
 		f = new JFrame(filename);
-		f.setSize((1000), (1000));
+		f.setSize((1000), (500));
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			
 		// Print Object Box
@@ -110,16 +101,20 @@ public class UML {
 	}
 
 	private static int draw_class(Element curr_class, int x, int y) {
-		System.out.println("Drawing: " + curr_class.get_name());
+		// System.out.println("Drawing " + curr_class.get_name() + " at " + x + ", " + y);
 		curr_class.set_x(x);
 		curr_class.set_y(y);
 		f.add(curr_class);
 		f.setVisible(true);
-		for (Element sub_class: curr_class.get_children()) {
-			x = draw_class(sub_class, x, y + curr_class.get_height() + 60);
+		if (curr_class.get_children().size() > 0) {
+			for (Element sub_class: curr_class.get_children()) {
+				x = draw_class(sub_class, x, y + curr_class.get_height() + 60);
+			}
+		} else if (curr_class.get_width() < curr_class.get_parent().get_width()) {
+			x += curr_class.get_parent().get_width() + 10;
+		} else {
+			x += curr_class.get_width() + 10;
 		}
-		x += curr_class.get_width();
-		System.out.println(x);
 		return x;
 	}
 }
