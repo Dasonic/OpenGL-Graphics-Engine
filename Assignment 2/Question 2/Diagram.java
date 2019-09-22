@@ -13,9 +13,9 @@ public class Diagram {
 
 		set_up_GUI(fileName, data);
 
-		for (int i = 0; i < 41; i++) {
-			System.out.print(data[2][i] + " ");
-		}
+		// for (int i = 0; i < 41; i++) {
+		// 	System.out.print(data[2][i] + " ");
+		// }
 	}
 
 	// Reads data from a file and stores it in an arraylist
@@ -73,8 +73,8 @@ public class Diagram {
 		f = new JFrame(filename);
 		f.setSize((1000), (500));
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-			
-		// Draw graph
+		Outline outline = new Outline(500, 50, 200, 200, 10);
+		outline.draw(f);
 
 	}
 }

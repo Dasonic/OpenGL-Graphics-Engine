@@ -98,7 +98,7 @@ public class Element extends JComponent {
 	private void really_add(String type, String line, Canvas c) {
 		if (type.equals("method")) {
 			this.methods.add(line); // Don't add the word and save it as a line
-		} else if (type.equals("variable")) {
+		} else if (type.equals("variable")) {extends JComponent
 			this.variables.add(line); // Don't add the word and save it as a line
 		}
 		this.total_height += this.height;
