@@ -89,9 +89,9 @@ public class Diagram {
 				DataGraph data_graph = new DataGraph(graph_x, graph_y, (int)data[i][j], (int)data[i][j + 1], data_length, data_width, 30, colour_array[i]);
 				f.add(data_graph);
 				f.setVisible(true);
-				// break;
+				break;
 			}
-			// break;
+			break;
 		}
 		Outline outline = new Outline(500, 50, length, height, width, 11);
 		outline.draw(f);

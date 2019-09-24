@@ -58,28 +58,41 @@ public class DataGraph extends JComponent {
 	}
 
 	private void fill_poly(Graphics2D g2) {
-		// Find the top point before it gets an angle
+		g2.setColor(this.colour);
 		int top_before_angle = point1 < point2 ? point1 : point2;
 		int very_top = point1 > point2 ? point1 : point2;
 		Point top_side = itl.y < itr.y ? ibr : ibl;
 		Point bottom_side = itl.y > itr.y ? ibr : ibl;
-		// System.out.println(top_before_angle);
+		// Fill to before angle
 		int y = 0;
 		for (; y <= top_before_angle; y++) {
 			Line2D fill_line = new Line2D.Double(ibl.x, ibl.y - y, ibr.x, ibr.y - y);
 			g2.draw(fill_line);
 		}
-		// Line2D fill_line = new Line2D.Double(bottom_side.x, bottom_side.y - y, top_side.x, top_side.y - y);
-		// g2.draw(fill_line);
-		for (int yt = y - 1; yt < very_top; yt++) {
-			// System.out.println(bottom_side.y + y);
+		// Fill angle
+		int yt = y - 1;
+		for (;yt < very_top; yt++) {
 			Line2D fill_line = new Line2D.Double(bottom_side.x, bottom_side.y - yt, top_side.x, top_side.y - y);
+			g2.draw(fill_line);
+		}
+		// Fill top
+		double line_angle = Math.atan2(itl.y - itr.y, itl.x - itr.x);
+		System.out.println(line_angle);
+		// Difference in height between left and right
+		int height_difference = Math.abs(itl.y - itr.y) / this.width;
+		for (int x = 0; x < this.width; x++) {
+			int top_x = otl.x + (int)(Math.cos(Math.toRadians(line_angle)) * (double)x);
+			int top_y = otl.y + (int)(Math.sin(Math.toRadians(line_angle)) * (double)x);
+			int bot_x = itl.x + (int)(Math.cos(Math.toRadians(line_angle)) * (double)x);
+			int bot_y = itl.y + (int)(Math.sin(Math.toRadians(line_angle)) * (double)x);
+			Line2D fill_line = new Line2D.Double(bot_x, bot_y, top_x, top_y);
 			g2.draw(fill_line);
 		}
 		
 	}
 
 	private void draw_poly(int x, int y, Graphics2D g2) {
+		g2.setColor(Color.BLACK);
 		// Outer
 		Line2D start_obr = new Line2D.Double(start_x, start_y, obr.x, obr.y);
 		Line2D start_otl = new Line2D.Double(start_x, start_y, otl.x, otl.y);
@@ -115,8 +128,7 @@ public class DataGraph extends JComponent {
 
 	public void paintComponent(Graphics g) {
 		Graphics2D g2 = (Graphics2D) g.create();
-		g2.setColor(this.colour);
-		draw_poly(this.start_x, this.start_y, g2);
 		fill_poly(g2);
+		draw_poly(this.start_x, this.start_y, g2);
 	}
 }
