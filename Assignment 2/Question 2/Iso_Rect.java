@@ -17,6 +17,14 @@ public class Iso_Rect extends JComponent {
 		return;
 	}
 
+	public int get_lowest_y() {
+		return (int)(Math.sin(Math.toRadians(this.rotation_angle)) * (double)this.length) + this.y + this.height;
+	}
+
+	public int get_far_right_x() {
+		return (int)(Math.cos(Math.toRadians(this.rotation_angle)) * (double)this.length) + this.x;
+	}
+
 	private void draw_rect(int x, int y, Graphics2D g2) {
 		g2.setColor(Color.BLUE);
 		// Calulate right hand points for inner rectangle
@@ -48,10 +56,9 @@ public class Iso_Rect extends JComponent {
 		g2.draw(outer_top_middle_line);
 		g2.draw(outer_top_right_middle_line);
 		g2.draw(outer_bottom_middle_line);
-
 	}
 
-	private void fill_rect() {
+	private void fill_rect(Graphics2D g2) {
 		g2.setColor(Color.BLACK);
 		for (int i = 0; i < this.height; i++) {
 			Line2D top_right = new Line2D.Double(x, y, x + this.length, y);

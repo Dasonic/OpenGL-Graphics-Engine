@@ -70,11 +70,30 @@ public class Diagram {
 	}
 
 	private static void set_up_GUI(String filename, double[][] data) {
+		Color colour_array[] = {Color.RED, Color.MAGENTA, Color.ORANGE, Color.YELLOW, Color.GREEN, Color.CYAN};
+		int length = 400;
+		int height = 400;
+		int width = 20;
 		f = new JFrame(filename);
-		f.setSize((1000), (500));
+		f.setSize((1000), (1000));
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		Outline outline = new Outline(500, 50, 200, 200, 10);
+		// Figure out 0, 0 for each graph section
+		int data_width = (int)(height / data.length);
+		int data_length = (int)(length / (data[0].length - 1));
+		double angle_cos = Math.cos(Math.toRadians(-30));
+		double angle_sin = Math.sin(Math.toRadians(-30));
+		for (int i = data.length - 1; i >= 0; i--) {
+			for (int j = 0; j < data[0].length - 1; j++){
+				int graph_x = 500 - (int)(angle_cos * ((double)(data_width * i) - (double)(data_length * j)));
+				int graph_y = 50 + height  - (int)(angle_sin * ((double)(data_width * i) + (double)(data_length * j)));
+				DataGraph data_graph = new DataGraph(graph_x, graph_y, (int)data[i][j], (int)data[i][j + 1], data_length, data_width, 30, colour_array[i]);
+				f.add(data_graph);
+				f.setVisible(true);
+				// break;
+			}
+			// break;
+		}
+		Outline outline = new Outline(500, 50, length, height, width, 11);
 		outline.draw(f);
-
 	}
 }
