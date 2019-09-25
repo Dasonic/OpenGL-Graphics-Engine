@@ -9,6 +9,8 @@ public class DataGraph extends JComponent {
 	double rotation_angle;
 	Point otl, obr, otr, itl, ibr, itr, ibl;
 	Color colour;
+	Polygon side, top, front;
+	boolean draw_front = false;
 	public DataGraph(int start_x, int start_y, int point1, int point2, int length, int width, double rotation_angle, Color colour) {
 		this.start_x = start_x;
 		this.start_y = start_y;
@@ -19,6 +21,7 @@ public class DataGraph extends JComponent {
 		this.rotation_angle = rotation_angle;
 		this.colour = colour;
 		calculate_points();
+		calculate_polygons();
 		return;
 	}
 
@@ -57,73 +60,39 @@ public class DataGraph extends JComponent {
 		ibl.y = start_y + (int)(Math.sin(Math.toRadians(this.rotation_angle)) * (double)this.width);
 	}
 
+	private void calculate_polygons() {
+		int x_array_s[] = {ibl.x, ibr.x, itr.x, itl.x};
+		int y_array_s[] = {ibl.y, ibr.y, itr.y, itl.y};
+		this.side = new Polygon(x_array_s, y_array_s, 4);
+		int x_array_t[] = {itl.x, itr.x, otr.x, otl.x};
+		int y_array_t[] = {itl.y, itr.y, otr.y, otl.y};
+		this.top = new Polygon(x_array_t, y_array_t, 4);
+	}
+
+	public void set_draw_front() {
+		this.draw_front = true;
+		int x_array_f[] = {ibr.x, obr.x, otr.x, itr.x};
+		int y_array_f[] = {ibr.y, obr.y, otr.y, itr.y};
+		this.front = new Polygon(x_array_f, y_array_f, 4);
+	}
+
 	private void fill_poly(Graphics2D g2) {
 		g2.setColor(this.colour);
-		int top_before_angle = point1 < point2 ? point1 : point2;
-		int very_top = point1 > point2 ? point1 : point2;
-		Point top_side = itl.y < itr.y ? ibr : ibl;
-		Point bottom_side = itl.y > itr.y ? ibr : ibl;
-		// Fill to before angle
-		int y = 0;
-		for (; y <= top_before_angle; y++) {
-			Line2D fill_line = new Line2D.Double(ibl.x, ibl.y - y, ibr.x, ibr.y - y);
-			g2.draw(fill_line);
-		}
-		// Fill angle
-		int yt = y - 1;
-		for (;yt < very_top; yt++) {
-			Line2D fill_line = new Line2D.Double(bottom_side.x, bottom_side.y - yt, top_side.x, top_side.y - y);
-			g2.draw(fill_line);
-		}
-		// Fill top
-		double line_angle = Math.atan2(itl.y - itr.y, itl.x - itr.x);
-		System.out.println(line_angle);
-		// Difference in height between left and right
-		int height_difference = Math.abs(itl.y - itr.y) / this.width;
-		for (int x = 0; x < this.width; x++) {
-			int top_x = otl.x + (int)(Math.cos(Math.toRadians(line_angle)) * (double)x);
-			int top_y = otl.y + (int)(Math.sin(Math.toRadians(line_angle)) * (double)x);
-			int bot_x = itl.x + (int)(Math.cos(Math.toRadians(line_angle)) * (double)x);
-			int bot_y = itl.y + (int)(Math.sin(Math.toRadians(line_angle)) * (double)x);
-			Line2D fill_line = new Line2D.Double(bot_x, bot_y, top_x, top_y);
-			g2.draw(fill_line);
-		}
-		
+		g2.setBackground(this.colour);
+		// Draw and fill side
+		g2.drawPolygon(this.side);
+		g2.fillPolygon(this.side);
+		// Draw and fill top
+		g2.fillPolygon(this.top);
+
+		// Draw and fill front
+		if (draw_front)
+			g2.fillPolygon(this.front);
 	}
 
 	private void draw_poly(int x, int y, Graphics2D g2) {
 		g2.setColor(Color.BLACK);
-		// Outer
-		Line2D start_obr = new Line2D.Double(start_x, start_y, obr.x, obr.y);
-		Line2D start_otl = new Line2D.Double(start_x, start_y, otl.x, otl.y);
-		Line2D otl_otr = new Line2D.Double(otl.x, otl.y, otr.x, otr.y);
-		Line2D otr_obr = new Line2D.Double(otr.x, otr.y, obr.x, obr.y);
-		// g2.draw(start_obr);
-		// g2.draw(start_otl);
-		g2.draw(otl_otr);
-		// g2.draw(otr_obr);
-
-		// Inner
-		Line2D ibl_ibr = new Line2D.Double(ibl.x, ibl.y, ibr.x, ibr.y);
-		Line2D ibl_itl = new Line2D.Double(ibl.x, ibl.y, itl.x, itl.y);
-		Line2D itl_itr = new Line2D.Double(itl.x, itl.y, itr.x, itr.y);
-		Line2D itr_ibr = new Line2D.Double(itr.x, itr.y, ibr.x, ibr.y);
-		// g2.draw(ibl_ibr);
-		// g2.draw(ibl_itl);
-		g2.draw(itl_itr);
-		// g2.draw(itr_ibr);
-		
-		// Connections
-		Line2D start_ibl = new Line2D.Double(start_x, start_y, ibl.x, ibl.y);
-		Line2D obr_ibr = new Line2D.Double(obr.x, obr.y, ibr.x, ibr.y);
-		Line2D otr_itr = new Line2D.Double(otr.x, otr.y, itr.x, itr.y);
-		Line2D otl_itl = new Line2D.Double(otl.x, otl.y, itl.x, itl.y);
-		// g2.draw(start_ibl);
-		// g2.draw(obr_ibr);
-		g2.draw(otr_itr);
-		g2.draw(otl_itl);
-		
-		
+		g2.drawPolygon(this.top);
 	}
 
 	public void paintComponent(Graphics g) {

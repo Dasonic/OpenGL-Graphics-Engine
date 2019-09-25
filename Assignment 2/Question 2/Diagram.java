@@ -29,7 +29,7 @@ public class Diagram {
 			// Always wrap FileReader in BufferedReader.
 			BufferedReader bufferedReader = new BufferedReader(fileReader);
 			String previous_line_year = "1978";
-			int year = 0;
+			int year = 40;
 			ArrayList<ArrayList<Double>> month = new ArrayList<ArrayList<Double>>();
 			for (int i = 0; i < 5; i++) { // Init the array lists
 				month.add(new ArrayList<Double>());
@@ -56,9 +56,10 @@ public class Diagram {
 					}
 					// Add this years variables
 					previous_line_year = tempLine[1];
-					year++;
+					year--;
 				}
 			}
+			// System.out.println(year);
 			// Always close files.
 			bufferedReader.close();
 		} catch (FileNotFoundException ex) {
@@ -87,11 +88,13 @@ public class Diagram {
 				int graph_x = 500 - (int)(angle_cos * ((double)(data_width * i) - (double)(data_length * j)));
 				int graph_y = 50 + height  - (int)(angle_sin * ((double)(data_width * i) + (double)(data_length * j)));
 				DataGraph data_graph = new DataGraph(graph_x, graph_y, (int)data[i][j], (int)data[i][j + 1], data_length, data_width, 30, colour_array[i]);
+				if ((j + 2) >= data[0].length)
+					data_graph.set_draw_front();
 				f.add(data_graph);
 				f.setVisible(true);
-				break;
+				// break;
 			}
-			break;
+			// break;
 		}
 		Outline outline = new Outline(500, 50, length, height, width, 11);
 		outline.draw(f);
