@@ -10,8 +10,9 @@ public class DataGraph extends JComponent {
 	Point otl, obr, otr, itl, ibr, itr, ibl;
 	Color colour;
 	Polygon side, top, front;
-	boolean draw_front = false;
-	public DataGraph(int start_x, int start_y, int point1, int point2, int length, int width, double rotation_angle, Color colour) {
+	boolean draw_front, draw_text = false;
+	String represents, age_group = "";
+	public DataGraph(int start_x, int start_y, int point1, int point2, int length, int width, double rotation_angle, Color colour, String represents, String age_group) {
 		this.start_x = start_x;
 		this.start_y = start_y;
 		this.point1 = point1;
@@ -20,6 +21,8 @@ public class DataGraph extends JComponent {
 		this.width = width;
 		this.rotation_angle = rotation_angle;
 		this.colour = colour;
+		this.represents = represents;
+		this.age_group = age_group;
 		calculate_points();
 		calculate_polygons();
 		return;
@@ -86,8 +89,17 @@ public class DataGraph extends JComponent {
 		g2.fillPolygon(this.top);
 
 		// Draw and fill front
-		if (draw_front)
+		if (draw_front) {
 			g2.fillPolygon(this.front);
+			g2.setColor(Color.BLACK);
+			Line2D in_outline = new Line2D.Double(obr.x - 25, obr.y + 14, obr.x - 25, obr.y + 34);
+			g2.draw(in_outline);
+			Line2D out_outline = new Line2D.Double(obr.x - 25, obr.y + 34, obr.x, obr.y + 45);
+			g2.draw(out_outline);
+			g2.rotate(Math.toRadians(30), obr.x, obr.y + 50);
+			g2.drawString(this.age_group, obr.x, obr.y + 50);
+			g2.rotate(Math.toRadians(-30), obr.x, obr.y + 50);
+		}
 	}
 
 	private void draw_poly(int x, int y, Graphics2D g2) {
@@ -95,9 +107,27 @@ public class DataGraph extends JComponent {
 		g2.drawPolygon(this.top);
 	}
 
+	public void set_draw_text() {
+		this.draw_text = true;
+		return;
+	}
+
+	private void draw_text(Graphics2D g2) {
+		Line2D in_outline = new Line2D.Double(ibl.x, ibl.y, ibl.x, ibl.y + 20);
+		g2.draw(in_outline);
+		Line2D out_outline = new Line2D.Double(ibl.x - 25, ibl.y + 30, ibl.x, ibl.y + 20);
+		g2.draw(out_outline);
+		// g2.draw(text_line);
+		g2.rotate(Math.toRadians(-30), this.ibl.x - 55, this.start_y + 95);
+		g2.drawString(this.represents, this.ibl.x - 55, this.start_y + 95);
+		return;
+	}
+
 	public void paintComponent(Graphics g) {
 		Graphics2D g2 = (Graphics2D) g.create();
 		fill_poly(g2);
 		draw_poly(this.start_x, this.start_y, g2);
+		if (this.draw_text)
+			draw_text(g2);
 	}
 }
