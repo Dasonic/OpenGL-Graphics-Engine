@@ -19,12 +19,6 @@ Polygon::Polygon(std::vector<std::vector<Point>> points, Point middle) {
 
 	rotate_matrix.set_up_transformation();
 	transform_matrix = transformation_matrix;
-	// vector<Point> temp_row(all_points[0].size(), {0, 0, 0});
-	// for (int i = 0; i < all_points.size(); i++) {
-	// 	transformed_points.push_back(temp_row);
-	// }
-	// cout << "test" << endl;
-	// transformed_points(all_points.size(), std::vector<Point>(all_points[0].size(), {0, 0, 0}));
 	apply_transformations();
 	return;
 }
@@ -44,9 +38,7 @@ void Polygon::rotate(double angle) {
 }
 
 void Polygon::apply_transformations() {
-	// transformed_points.clear();
 	// Transform all points
-	// cout << all_points.size() << " " << all_points[0].size() << endl;
 	for (int x = 0; x < all_points.size(); x++) {
 		for (int z = 0; z < all_points[0].size(); z++) {
 			// Convert point to matrix
@@ -59,30 +51,39 @@ void Polygon::apply_transformations() {
 			use_point.add_val(1, 0, transform_matrix.get_val(1, 3));
 			use_point.add_val(2, 0, transform_matrix.get_val(2, 3));
 			// Replace transformed points
-			// cout << x << " " << z << endl;
-			// cout << use_point.get_val(0, 0) << " " << use_point.get_val(1, 0) << " " << use_point.get_val(2, 0) << endl;
 			transformed_points[x][z] = {use_point.get_val(0, 0), use_point.get_val(1, 0), use_point.get_val(2, 0)};
-			// cout << "test" << endl;
 		}
 	}
 	return;
 }
 
+colour Polygon::get_colour(double height) {
+	if (height < 20) {
+		return {0.76, 0.70, 0.50};
+	} else if (height < 45) {
+		return {0, 0.50, 0};
+	} else {
+		return {0.94, 0.97, 1};
+	}
+}
+
 void Polygon::draw() {
-	// apply_transformations();
 	// Draw polygon using transformed points
 	for (int x = 0; x < all_points.size() - 1; x++) {
 		for (int z = 0; z < all_points[0].size() - 1; z++) {
-			// glBegin(GL_TRIANGLES);
-			// 	glVertex3f(transformed_points[x][z].x, transformed_points[x][z].y, transformed_points[x][z].z);
-			// 	glVertex3f(transformed_points[x + 1][z].x, transformed_points[x + 1][z].y, transformed_points[x + 1][z].z);
-			// 	glVertex3f(transformed_points[x][z+1].x, transformed_points[x][z+1].y, transformed_points[x][z+1].z);
-			// glEnd();
-			// glBegin(GL_TRIANGLES);
-			// 	glVertex3f(transformed_points[x + 1][z].x, transformed_points[x + 1][z].y, transformed_points[x + 1][z].z);
-			// 	glVertex3f(transformed_points[x][z + 1].x, transformed_points[x][z + 1].y, transformed_points[x][z + 1].z);
-			// 	glVertex3f(transformed_points[x + 1][z + 1].x, transformed_points[x + 1][z + 1].y, transformed_points[x + 1][z + 1].z);
-			// glEnd();
+			colour RGB = get_colour(transformed_points[x + 1][z].y);
+			glColor3d(RGB.R, RGB.G, RGB.B); // Set colour
+			glBegin(GL_TRIANGLES);
+				glVertex3f(transformed_points[x][z].x, transformed_points[x][z].y, transformed_points[x][z].z);
+				glVertex3f(transformed_points[x + 1][z].x, transformed_points[x + 1][z].y, transformed_points[x + 1][z].z);
+				glVertex3f(transformed_points[x][z+1].x, transformed_points[x][z+1].y, transformed_points[x][z+1].z);
+			glEnd();
+			glBegin(GL_TRIANGLES);
+				glVertex3f(transformed_points[x + 1][z].x, transformed_points[x + 1][z].y, transformed_points[x + 1][z].z);
+				glVertex3f(transformed_points[x][z + 1].x, transformed_points[x][z + 1].y, transformed_points[x][z + 1].z);
+				glVertex3f(transformed_points[x + 1][z + 1].x, transformed_points[x + 1][z + 1].y, transformed_points[x + 1][z + 1].z);
+			glEnd();
+			glColor3d(0, 0, 0);
 			glBegin(GL_LINES);
 				glVertex3f(transformed_points[x][z].x, transformed_points[x][z].y, transformed_points[x][z].z);
 			 	glVertex3f(transformed_points[x + 1][z].x, transformed_points[x + 1][z].y, transformed_points[x + 1][z].z);
@@ -94,6 +95,5 @@ void Polygon::draw() {
 				glVertex3f(transformed_points[x][z].x, transformed_points[x][z].y, transformed_points[x][z].z);
 			glEnd();
 		}
-		// break;
 	}
 }

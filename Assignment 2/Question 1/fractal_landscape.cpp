@@ -10,6 +10,7 @@
 #include "matrix.h"
 #include "structs.h"
 #include "Polygon.h"
+#include "water.h"
 
 using namespace std;
 
@@ -17,10 +18,16 @@ using namespace std;
 // Point values[129][97] = {0};
 vector<vector<Point>> values(129, std::vector<Point>(97, {0, 0, 0}));
 Polygon *land;
+// Polygon *water;
+water *sea;
+
 int rotation = 0;
+int water_level = 1;
 
 void readfile() {
 	ifstream infile("landscape.txt");
+	int halfway_x = (int)(129 / 2);
+	int halfway_y = (int)(97 / 2);
 	
 	string line;
 	getline(infile, line);
@@ -33,7 +40,7 @@ void readfile() {
 			vector<string> tokens{istream_iterator<string>{iss},
 				istream_iterator<string>{}};
 			for (int j = 0; j < 97; j++) {
-				values[i][j] = {(double)i, stod(tokens[j]) * 100, (double)j};
+				values[i][j] = {(double)i - halfway_x, stod(tokens[j]) * 100, (double)j - halfway_y};
 			}
 		}
 		i++;
@@ -55,7 +62,10 @@ static void display(void) {
 	glColor3d(1, 1, 1); // Set colour
 	land->rotate(rotation);
 	land->draw();
-	
+	sea->rotate(rotation);
+	sea->draw();
+	// sea->set_water_level(water_level);
+	// sea->draw();
     glutSwapBuffers();
 }
 
@@ -74,6 +84,14 @@ static void key(unsigned char key, int x, int y)
 		case 'd':
 			rotation++;
 			break;
+		case 'w':
+			water_level++;
+			sea->set_water_level(water_level);
+			break;
+		case 's':
+			water_level--;
+			sea->set_water_level(water_level);
+			break;
     }
     glutPostRedisplay();
 }
@@ -88,16 +106,23 @@ int main(int argc, char** argv)
 {
 	// double values[129][97] = {0};
 	readfile();
-	land = new Polygon(values, {20, 40, 0});
-	// vector<Point> a = {{0, 0, 1}, {1, 0, 1}};
-	// vector<Point> b = {{1, 1, 1}};
+	land = new Polygon(values, {40, 40, 0});
+	// vector<Point> a = {{values[0][0].x, 1, values[0][0].z}, {values[128][0].x, 1, values[128][0].z}};
+	// vector<Point> b = {{values[128][96].x, 1, values[128][96].z}};
 	// vector<vector<Point>> test = {a, b};
+
+	// sea = new water(values, {40, 40, 0});
 	// land = new Polygon(test, {0, 0, 0});
+	vector<Point> a = {{values[0][0].x, 1, values[0][0].z}, {values[128][0].x, 1, values[128][0].z}};
+	vector<Point> b = {{values[0][96].x, 1, values[0][96].z}, {values[128][96].x, 1, values[128][96].z}};
+	vector<vector<Point>> test = {a, b};
+	sea = new water(test, {40, 20, 0});
+	sea->set_lowest_point(1);
 
     glutInit(&argc, argv);
     glutInitWindowSize(800,800); // Size of the window (not including decorations, just usable space)
     glutInitWindowPosition(20,10); // Where on the screen the window appears (Top left of decoration for windows and linux) (x, y)
-    glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB | GLUT_DEPTH);
+    glutInitDisplayMode(GLUT_SINGLE | GLUT_RGBA | GLUT_DEPTH);
 
     glutCreateWindow("Fractal Landscape");
 
@@ -105,6 +130,14 @@ int main(int argc, char** argv)
     glutDisplayFunc(display); // Takes in function name
     glutKeyboardFunc(key); // Register key presses, takes in function name
     glutIdleFunc(idle); // Takes in function name
+
+	glEnable(GL_DEPTH_TEST); // Depth Testing
+	glDepthFunc(GL_LEQUAL);
+	glDisable(GL_CULL_FACE);
+	glCullFace(GL_BACK);
+
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     glClearColor(0,0,0,0); // Clear values for colour buffers (background colour)
 

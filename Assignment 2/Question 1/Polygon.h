@@ -5,10 +5,12 @@
 	#include "structs.h"
 
 	class Polygon {
-		std::vector<std::vector<Point>> all_points;
-		std::vector<std::vector<Point>> transformed_points;
-		matrix transform_matrix;
-		matrix rotate_matrix;
+		protected:
+			std::vector<std::vector<Point>> all_points;
+			std::vector<std::vector<Point>> transformed_points;
+			matrix transform_matrix;
+			matrix rotate_matrix;
+			colour get_colour(double height);
 		public:
 			Polygon(std::vector<std::vector<Point>> points, Point middle);
 			void draw();
