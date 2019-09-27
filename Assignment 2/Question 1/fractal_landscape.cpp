@@ -21,7 +21,7 @@ Polygon *land;
 // Polygon *water;
 water *sea;
 
-int rotation = 0;
+int rotation_x, rotation_y = 0;
 int water_level = 1;
 
 void readfile() {
@@ -60,9 +60,9 @@ static void resize(int width, int height) {
 static void display(void) {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glColor3d(1, 1, 1); // Set colour
-	land->rotate(rotation);
+	land->rotate(rotation_x, rotation_y);
 	land->draw();
-	sea->rotate(rotation);
+	sea->rotate(rotation_x, rotation_y);
 	sea->draw();
 	// sea->set_water_level(water_level);
 	// sea->draw();
@@ -75,20 +75,26 @@ static void key(unsigned char key, int x, int y)
     switch (key)
     {
         case 27 :
-        case 'q':
+        case 'r':
             exit(0);
             break;
 		case 'a':
-			rotation--;
+			rotation_y--;
 			break;
 		case 'd':
-			rotation++;
+			rotation_y++;
 			break;
 		case 'w':
+			rotation_x--;
+			break;
+		case 's':
+			rotation_x++;
+			break;
+		case 'q':
 			water_level++;
 			sea->set_water_level(water_level);
 			break;
-		case 's':
+		case 'e':
 			water_level--;
 			sea->set_water_level(water_level);
 			break;

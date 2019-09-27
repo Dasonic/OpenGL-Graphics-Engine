@@ -14,7 +14,7 @@
 		public:
 			Polygon(std::vector<std::vector<Point>> points, Point middle);
 			void draw();
-			void rotate(double angle);
+			void rotate(double angle_x, double angle_y);
 			void apply_transformations();
 
 	};
