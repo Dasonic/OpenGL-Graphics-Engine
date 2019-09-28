@@ -84,16 +84,31 @@ void Polygon::draw() {
 	// Draw polygon using transformed points
 	for (int x = 0; x < all_points.size() - 1; x++) {
 		for (int z = 0; z < all_points[0].size() - 1; z++) {
-			colour RGB = get_colour(all_points[x + 1][z].y);
-			glColor3d(RGB.R, RGB.G, RGB.B); // Set colour
+			colour RGB;
 			glBegin(GL_TRIANGLES);
+				RGB = get_colour(all_points[x][z].y);
+				glColor3d(RGB.R, RGB.G, RGB.B); // Set colour
 				glVertex3f(transformed_points[x][z].x, transformed_points[x][z].y, transformed_points[x][z].z);
+
+				RGB = get_colour(all_points[x + 1][z].y);
+				glColor3d(RGB.R, RGB.G, RGB.B); // Set colour
 				glVertex3f(transformed_points[x + 1][z].x, transformed_points[x + 1][z].y, transformed_points[x + 1][z].z);
+
+				RGB = get_colour(all_points[x][z + 1].y);
+				glColor3d(RGB.R, RGB.G, RGB.B); // Set colour
 				glVertex3f(transformed_points[x][z+1].x, transformed_points[x][z+1].y, transformed_points[x][z+1].z);
 			glEnd();
 			glBegin(GL_TRIANGLES);
+				RGB = get_colour(all_points[x + 1][z].y);
+				glColor3d(RGB.R, RGB.G, RGB.B); // Set colour
 				glVertex3f(transformed_points[x + 1][z].x, transformed_points[x + 1][z].y, transformed_points[x + 1][z].z);
+
+				RGB = get_colour(all_points[x][z + 1].y);
+				glColor3d(RGB.R, RGB.G, RGB.B); // Set colour
 				glVertex3f(transformed_points[x][z + 1].x, transformed_points[x][z + 1].y, transformed_points[x][z + 1].z);
+
+				RGB = get_colour(all_points[x + 1][z + 1].y);
+				glColor3d(RGB.R, RGB.G, RGB.B); // Set colour
 				glVertex3f(transformed_points[x + 1][z + 1].x, transformed_points[x + 1][z + 1].y, transformed_points[x + 1][z + 1].z);
 			glEnd();
 			glColor3d(0, 0, 0);
