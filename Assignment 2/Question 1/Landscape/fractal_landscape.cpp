@@ -24,13 +24,13 @@ water *sea;
 int rotation_x, rotation_y = 0;
 int water_level = 1;
 
-void readfile() {
-	ifstream infile("landscape.txt");
+void readfile(string file_name) {
+	ifstream infile(file_name);
 	int halfway_x = (int)(129 / 2);
 	int halfway_y = (int)(97 / 2);
 	
 	string line;
-	getline(infile, line);
+	// getline(infile, line);
 	int i = 0;
 	while (getline(infile, line))
 	{
@@ -40,7 +40,7 @@ void readfile() {
 			vector<string> tokens{istream_iterator<string>{iss},
 				istream_iterator<string>{}};
 			for (int j = 0; j < 97; j++) {
-				values[i][j] = {(double)i - halfway_x, stod(tokens[j]) * 100, (double)j - halfway_y};
+				values[i][j] = {(double)i - halfway_x, stod(tokens[j]) * 35, (double)j - halfway_y};
 			}
 		}
 		i++;
@@ -110,8 +110,10 @@ static void idle(void)
 
 int main(int argc, char** argv)
 {
+
 	// double values[129][97] = {0};
-	readfile();
+	cout << argc <<  endl;
+	readfile(argv[1]);
 	land = new Polygon(values, {40, 40, 0});
 	// vector<Point> a = {{values[0][0].x, 1, values[0][0].z}, {values[128][0].x, 1, values[128][0].z}};
 	// vector<Point> b = {{values[128][96].x, 1, values[128][96].z}};
@@ -126,7 +128,7 @@ int main(int argc, char** argv)
 	sea->set_lowest_point(1);
 
     glutInit(&argc, argv);
-    glutInitWindowSize(800,800); // Size of the window (not including decorations, just usable space)
+    glutInitWindowSize(1000,1000); // Size of the window (not including decorations, just usable space)
     glutInitWindowPosition(20,10); // Where on the screen the window appears (Top left of decoration for windows and linux) (x, y)
     glutInitDisplayMode(GLUT_SINGLE | GLUT_RGBA | GLUT_DEPTH);
 
