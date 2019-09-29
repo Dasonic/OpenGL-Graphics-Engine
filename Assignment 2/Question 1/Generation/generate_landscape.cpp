@@ -9,7 +9,8 @@ void generate_terrain(float heightMap[][97], int seed) {
 	FastNoise myNoise; // Create a FastNoise object
 	myNoise.SetNoiseType(FastNoise::Perlin); // Set the desired noise type
 	myNoise.SetSeed(seed);
-	myNoise.SetFrequency(0.045);
+	myNoise.SetFrequency(0.065);
+	// myNoise.SetInterp(FastNoise::Hermite);
 
 	for (int x = 0; x < 129; x++) {
 		for (int y = 0; y < 97; y++) {
